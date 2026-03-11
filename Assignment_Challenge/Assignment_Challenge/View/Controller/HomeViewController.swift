@@ -14,13 +14,13 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.navigationItem.searchController = searchController
-        print("")
+        view.backgroundColor = .white
+        self.title = "Music"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.searchController = searchController
+        navigationItem.preferredSearchBarPlacement = .stacked
     }
 
-    func add() {
-        print(1 + 3)
-    }
 
 }
 
