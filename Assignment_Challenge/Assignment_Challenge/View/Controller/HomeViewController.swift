@@ -9,11 +9,18 @@ import UIKit
 
 class HomeViewController: UIViewController {
 
+    let searchController = UISearchController(searchResultsController: nil)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.navigationItem.searchController = searchController
+        print("")
     }
 
+    func add() {
+        print(1 + 3)
+    }
 
 }
 
