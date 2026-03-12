@@ -29,8 +29,13 @@ final class BestMusicCell: UICollectionViewCell {
         noteView.backgroundColor = randomBrightColor()
         noteView.clipsToBounds = true
         
+        albumImage.image = UIImage(systemName: "music.note")
+        albumImage.backgroundColor = .gray
         albumImage.layer.cornerRadius = 10
         albumImage.clipsToBounds = true
+        albumImage.snp.makeConstraints {
+            $0.width.height.equalTo(30)
+        }
         
         titleLabel.font = .boldSystemFont(ofSize: 14)
         
@@ -74,6 +79,12 @@ final class BestMusicCell: UICollectionViewCell {
             $0.bottom.horizontalEdges.equalToSuperview()
             $0.height.equalToSuperview().multipliedBy(0.25)
         }
+    }
+}
+
+extension BestMusicCell {
+    func configure(with: Music) {
+        
     }
 }
 
