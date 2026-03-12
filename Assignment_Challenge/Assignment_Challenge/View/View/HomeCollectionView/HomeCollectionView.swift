@@ -8,6 +8,6 @@
 import UIKit
 import SnapKit
 
-final class HomeView: UIView {
+final class HomeCollectionView: UIView {
 
 }
