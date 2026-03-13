@@ -8,11 +8,29 @@
 import UIKit
 import SnapKit
 
-enum Section {
+enum Section: Int {
     case spring
     case summer
     case autumn
     case winter
+    
+    var title: String {
+        switch self {
+        case .spring: "봄 Best"
+        case .summer: "여름"
+        case .autumn: "가을"
+        case .winter: "겨울"
+        }
+    }
+    
+    var secondaryTitle: String {
+        switch self {
+        case .spring: "봄에 어울리는 음악 Best 5"
+        case .summer: "여름에 어울리는 음악"
+        case .autumn: "가을에 어울리는 음악"
+        case .winter: "겨울에 어울리는 음악"
+        }
+    }
 }
 
 final class MusicCollectionView: UICollectionView {
@@ -32,6 +50,16 @@ extension MusicCollectionView {
         configuration.interSectionSpacing = 20
         
         return UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, environment in
+            
+            let headerItem = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(54)
+                ),
+                elementKind: "HeaderKind",
+                alignment: .top
+            )
+            
             switch Section(rawValue: sectionIndex) {
             case .spring:
                 let containerSize = environment.container.effectiveContentSize
@@ -54,6 +82,7 @@ extension MusicCollectionView {
                 let section = NSCollectionLayoutSection(group: group)
                 section.interGroupSpacing = containerSize.width * 0.05
                 section.orthogonalScrollingBehavior = .groupPagingCentered
+                section.boundarySupplementaryItems = [headerItem]
                 
                 return section
                 

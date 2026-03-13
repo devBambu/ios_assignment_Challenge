@@ -50,6 +50,10 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController {
     private func makeCollectionViewDiffableDataSource(_ collectionView: UICollectionView) -> UICollectionViewDiffableDataSource<Section, Music> {
+        let headerRegistration = UICollectionView.SupplementaryRegistration<MusicHeaderView>(elementKind: "HeaderKind") { supplementaryView, elementKind, indexPath in
+            supplementaryView.configure(with: Section(rawValue: indexPath.section) ?? Section.spring)
+        }
+        
         let cellRegistration = UICollectionView.CellRegistration<BestMusicCell, Music> { cell, indexPath, music in
             cell.configure(with: music)
         }
@@ -58,8 +62,13 @@ extension HomeViewController {
             return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: music)
         }
         
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+            collectionView.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
+        }
+        
         return dataSource
     }
+    
     
     private func setSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Music>()

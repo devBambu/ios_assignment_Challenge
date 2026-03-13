@@ -10,7 +10,7 @@ import SnapKit
 final class MusicHeaderView: UICollectionReusableView {
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 16)
+        label.font = .systemFont(ofSize: 20, weight: .heavy)
         return label
     }()
     
@@ -24,13 +24,17 @@ final class MusicHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        addSubview(titleLabel)
+        addSubview(secondaryLabel)
+        
         titleLabel.snp.makeConstraints {
-            $0.top.leading.equalToSuperview().offset(10)
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().offset(20)
         }
         
         secondaryLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(5)
-            $0.leading.equalToSuperview().offset(10)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(3)
+            $0.leading.equalToSuperview().offset(20)
         }
     }
     
@@ -40,7 +44,8 @@ final class MusicHeaderView: UICollectionReusableView {
 }
 
 extension MusicHeaderView {
-    func configure(with: Section) {
-        
+    func configure(with section: Section) {
+        titleLabel.text = section.title
+        secondaryLabel.text = section.secondaryTitle
     }
 }
