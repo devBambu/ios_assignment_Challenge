@@ -85,10 +85,10 @@ extension HomeView {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Item>()
         snapshot.appendSections([.spring, .summer, .autumn, .winter])
         
-        snapshot.appendItems(data[0], toSection: .spring)
-        snapshot.appendItems(data[1], toSection: .summer)
-        snapshot.appendItems(data[2], toSection: .autumn)
-        snapshot.appendItems(data[3], toSection: .winter)
+        snapshot.appendItems(data[Section.spring.rawValue], toSection: .spring)
+        snapshot.appendItems(data[Section.summer.rawValue], toSection: .summer)
+        snapshot.appendItems(data[Section.autumn.rawValue], toSection: .autumn)
+        snapshot.appendItems(data[Section.winter.rawValue], toSection: .winter)
  
         dataSource.apply(snapshot)
     }
