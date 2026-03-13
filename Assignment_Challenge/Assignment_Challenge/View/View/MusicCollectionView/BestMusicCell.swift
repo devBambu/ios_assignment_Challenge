@@ -12,9 +12,11 @@ final class BestMusicCell: UICollectionViewCell {
     static let id = "BestMusicCell"
     
     let noteView = UIView()
-    let albumImage = UIImageView()
+    let albumImageView = UIImageView()
     let titleLabel = UILabel()
     let artistLabel = UILabel()
+    
+    // 음표 이미지 - 이미지 기본값으로 사용
     let noteImage: UIImage? = {
         let config = UIImage.SymbolConfiguration(hierarchicalColor: .secondaryWhite)
         return UIImage(systemName: "music.note", withConfiguration: config)
@@ -37,12 +39,12 @@ final class BestMusicCell: UICollectionViewCell {
         
         noteView.backgroundColor = randomBrightColor()
         
-        albumImage.image = noteImage
-        albumImage.contentMode = .center
-        albumImage.backgroundColor = .systemGray4
-        albumImage.layer.cornerRadius = 10
-        albumImage.clipsToBounds = true
-        albumImage.snp.makeConstraints {
+        albumImageView.image = noteImage
+        albumImageView.contentMode = .center
+        albumImageView.backgroundColor = .systemGray4
+        albumImageView.layer.cornerRadius = 10
+        albumImageView.clipsToBounds = true
+        albumImageView.snp.makeConstraints {
             $0.width.height.equalTo(30)
         }
         
@@ -59,8 +61,9 @@ final class BestMusicCell: UICollectionViewCell {
         let songBackgroundView = UIView()
         songBackgroundView.backgroundColor = .secondaryWhite
         
-        let songlabelStack = makeLabelStack(of: [titleLabel, artistLabel])
-        let songStack = makeSongStack(of: [albumImage, songlabelStack])
+        let songlabelStack = UIStackView(vertical: [titleLabel, artistLabel])
+        
+        let songStack = UIStackView(horizontal: [albumImageView, songlabelStack])
         
         contentView.addSubview(noteView)
         contentView.addSubview(songBackgroundView)
@@ -99,25 +102,7 @@ extension BestMusicCell {
     }
 }
 
-extension BestMusicCell {
-    // 곡 정보 스택 생성
-    private func makeSongStack(of views: [UIView]) -> UIStackView {
-        let stackView = UIStackView(arrangedSubviews: views)
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        stackView.alignment = .center
-        return stackView
-    }
-    
-    // 곡 정보 레이블 스택 생성
-    private func makeLabelStack(of views: [UIView]) -> UIStackView {
-        let stackView = UIStackView(arrangedSubviews: views)
-        stackView.axis = .vertical
-        stackView.alignment = .leading
-        stackView.spacing = 5
-        return stackView
-    }
-    
+extension BestMusicCell {    
     // 랜덤 컬러(밝은 색) 생성
     private func randomBrightColor() -> UIColor {
         let hue = CGFloat.random(in: 0...1)
