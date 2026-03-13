@@ -104,7 +104,7 @@ extension MusicCollectionView {
     }
     
     // 봄 섹션 레이아웃 생성
-    private func makeSpringSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {        
+    private func makeSpringSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
@@ -147,7 +147,6 @@ extension MusicCollectionView {
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPaging
-//        section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 40)
         
         return section
     }
