@@ -8,16 +8,16 @@
 import UIKit
 import SnapKit
 
-enum Section: Int {
+enum Section {
     case spring
     case summer
     case autumn
     case winter
 }
 
-final class HomeCollectionView: UICollectionView {
+final class MusicCollectionView: UICollectionView {
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
+        super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         collectionViewLayout = makeCompositionalLayout()
     }
     
@@ -26,7 +26,7 @@ final class HomeCollectionView: UICollectionView {
     }
 }
 
-extension HomeCollectionView {
+extension MusicCollectionView {
     private func makeCompositionalLayout() -> UICollectionViewCompositionalLayout {
         let configuration = UICollectionViewCompositionalLayoutConfiguration()
         configuration.interSectionSpacing = 20
@@ -43,15 +43,17 @@ extension HomeCollectionView {
                     )
                 )
                 
-                let group = NSCollectionLayoutGroup(
+                let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: NSCollectionLayoutSize(
                         widthDimension: .absolute(containerSize.width * 0.8),
                         heightDimension: .fractionalWidth(0.6)
-                    ))
+                    ),
+                    subitems: [item]
+                )
                 
                 let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = containerSize.width * 0.08
-                section.orthogonalScrollingBehavior = .groupPaging
+                section.interGroupSpacing = containerSize.width * 0.05
+                section.orthogonalScrollingBehavior = .groupPagingCentered
                 
                 return section
                 

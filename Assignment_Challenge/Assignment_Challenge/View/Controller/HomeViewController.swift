@@ -6,10 +6,21 @@
 //
 
 import UIKit
+import SnapKit
+import RxSwift
+import RxCocoa
+
 
 class HomeViewController: UIViewController {
 
-    let searchController = UISearchController(searchResultsController: nil)
+    let disposeBag = DisposeBag()
+    
+    let viewModel = MusicViewModel()
+    
+    private let searchController = UISearchController(searchResultsController: nil)
+    private let collectionView = MusicCollectionView()
+
+    private lazy var dataSource = makeCollectionViewDiffableDataSource(collectionView)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,8 +30,41 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
         navigationItem.preferredSearchBarPlacement = .stacked
+        
+        setLayout()
+        setSnapshot()
     }
+    
+    private func setLayout() {
+        view.addSubview(collectionView)
+        
+        collectionView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    
+    private func bindCollectionData() {
 
-
+    }
 }
 
+extension HomeViewController {
+    private func makeCollectionViewDiffableDataSource(_ collectionView: UICollectionView) -> UICollectionViewDiffableDataSource<Section, Music> {
+        let cellRegistration = UICollectionView.CellRegistration<BestMusicCell, Music> { cell, indexPath, music in
+            cell.configure(with: music)
+        }
+        
+        let dataSource = UICollectionViewDiffableDataSource<Section, Music>(collectionView: collectionView) { collectionView, indexPath, music in
+            return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: music)
+        }
+        
+        return dataSource
+    }
+    
+    private func setSnapshot() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Music>()
+        snapshot.appendSections([.spring])
+        snapshot.appendItems(viewModel.musics, toSection: .spring)
+        dataSource.apply(snapshot)
+    }
+}

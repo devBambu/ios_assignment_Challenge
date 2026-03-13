@@ -9,10 +9,16 @@ import UIKit
 import SnapKit
 
 final class BestMusicCell: UICollectionViewCell {
+    static let id = "BestMusicCell"
+    
     let noteView = UIView()
     let albumImage = UIImageView()
     let titleLabel = UILabel()
     let artistLabel = UILabel()
+    let noteImage: UIImage? = {
+        let config = UIImage.SymbolConfiguration(hierarchicalColor: .secondaryWhite)
+        return UIImage(systemName: "music.note", withConfiguration: config)
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,11 +32,14 @@ final class BestMusicCell: UICollectionViewCell {
     }
     
     private func setAttributes() {
-        noteView.backgroundColor = randomBrightColor()
-        noteView.clipsToBounds = true
+        contentView.layer.cornerRadius = 10
+        contentView.clipsToBounds = true
         
-        albumImage.image = UIImage(systemName: "music.note")
-        albumImage.backgroundColor = .gray
+        noteView.backgroundColor = randomBrightColor()
+        
+        albumImage.image = noteImage
+        albumImage.contentMode = .center
+        albumImage.backgroundColor = .systemGray4
         albumImage.layer.cornerRadius = 10
         albumImage.clipsToBounds = true
         albumImage.snp.makeConstraints {
@@ -44,23 +53,23 @@ final class BestMusicCell: UICollectionViewCell {
     }
     
     private func setLayout() {
-        let noteImageView = UIImageView(image: UIImage(systemName: "music.note")?.withTintColor(.white))
-        noteImageView.backgroundColor = .clear
+        let noteImageView = UIImageView(image: noteImage)
+        noteImageView.contentMode = .scaleAspectFit
         
         let songBackgroundView = UIView()
-        songBackgroundView.backgroundColor = .white
-        songBackgroundView.clipsToBounds = true
+        songBackgroundView.backgroundColor = .secondaryWhite
         
         let songlabelStack = makeLabelStack(of: [titleLabel, artistLabel])
         let songStack = makeSongStack(of: [albumImage, songlabelStack])
         
-        addSubview(noteView)
-        addSubview(songBackgroundView)
+        contentView.addSubview(noteView)
+        contentView.addSubview(songBackgroundView)
         
         noteView.addSubview(noteImageView)
         songBackgroundView.addSubview(songStack)
         
         noteImageView.snp.makeConstraints {
+            $0.width.height.equalToSuperview().multipliedBy(0.4)
             $0.center.equalToSuperview()
         }
         
@@ -83,8 +92,10 @@ final class BestMusicCell: UICollectionViewCell {
 }
 
 extension BestMusicCell {
-    func configure(with: Music) {
-        
+    func configure(with music: Music) {
+//        albumImage.image = UIImage
+        titleLabel.text = music.title
+        artistLabel.text = music.artist
     }
 }
 
