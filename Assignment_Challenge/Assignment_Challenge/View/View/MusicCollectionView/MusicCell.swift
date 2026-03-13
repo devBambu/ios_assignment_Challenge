@@ -8,18 +8,19 @@
 import UIKit
 import SnapKit
 
-final class MusicListCell: UICollectionViewListCell {
+final class MusicCell: UICollectionViewCell {
     static let id = "MusicListCell"
     
     let albumImageView = UIImageView()
-    let titleLabel = UILabel()
-    let artistLabel = UILabel()
-    let collectionLabel = UILabel()
+    let titleLabel = UILabel() // 곡 제목
+    let artistLabel = UILabel() // 가수
+    let collectionLabel = UILabel() // 앨범명
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         setAttributes()
+        setLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -31,6 +32,8 @@ final class MusicListCell: UICollectionViewListCell {
         albumImageView.image = UIImage(systemName: "music.note", withConfiguration: config) // 이미지 기본값 - 음표 이미지
         albumImageView.contentMode = .center
         albumImageView.backgroundColor = .systemGray4
+        albumImageView.layer.cornerRadius = 10
+        albumImageView.clipsToBounds = true
         
         titleLabel.font = .boldSystemFont(ofSize: 16)
 
@@ -41,13 +44,29 @@ final class MusicListCell: UICollectionViewListCell {
     }
     
     private func setLayout() {
+        let songLabelStack = UIStackView(vertical: [titleLabel, artistLabel, collectionLabel])
+        
         contentView.addSubview(albumImageView)
+        contentView.addSubview(songLabelStack)
 
+        albumImageView.snp.makeConstraints {
+            $0.width.height.equalTo(60)
+            $0.top.bottom.equalToSuperview().inset(10)
+//            $0.leading.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview()
+        }
+        
+        songLabelStack.snp.makeConstraints {
+            $0.centerY.equalTo(albumImageView)
+            $0.leading.equalTo(albumImageView.snp.trailing).offset(10)
+        }
     }
 }
 
-extension MusicListCell {
-    private func makeLabelStack() {
-        
+extension MusicCell {
+    func configure(with music: Music) {
+        titleLabel.text = music.title
+        artistLabel.text = music.artist
+        collectionLabel.text = music.collection
     }
 }

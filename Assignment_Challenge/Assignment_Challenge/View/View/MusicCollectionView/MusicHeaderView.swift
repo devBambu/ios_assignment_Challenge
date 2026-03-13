@@ -29,12 +29,12 @@ final class MusicHeaderView: UICollectionReusableView {
         
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview()
         }
         
         secondaryLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(3)
-            $0.leading.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview()
         }
     }
     

@@ -33,10 +33,36 @@ enum Section: Int {
     }
 }
 
+nonisolated
+enum Item: Hashable {
+    case spring(Music)
+    case summer(Music)
+    case autumn(Music)
+    case winter(Music)
+    
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .spring(let music):
+            hasher.combine("spring")
+            hasher.combine(music)
+        case .summer(let music):
+            hasher.combine("summer")
+            hasher.combine(music)
+        case .autumn(let music):
+            hasher.combine("autumn")
+            hasher.combine(music)
+        case .winter(let music):
+            hasher.combine("winter")
+            hasher.combine(music)
+        }
+    }
+}
+
 final class MusicCollectionView: UICollectionView {
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         collectionViewLayout = makeCompositionalLayout()
+        layoutMargins = .init(top: 0, left: 20, bottom: 0, right: 20)
     }
     
     required init?(coder: NSCoder) {
@@ -48,8 +74,9 @@ extension MusicCollectionView {
     private func makeCompositionalLayout() -> UICollectionViewCompositionalLayout {
         let configuration = UICollectionViewCompositionalLayoutConfiguration()
         configuration.interSectionSpacing = 20
+        configuration.contentInsetsReference = .layoutMargins
         
-        return UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, environment in
+        return UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, environment in
             
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: NSCollectionLayoutSize(
@@ -62,35 +89,66 @@ extension MusicCollectionView {
             
             switch Section(rawValue: sectionIndex) {
             case .spring:
-                let containerSize = environment.container.effectiveContentSize
-                
-                let item = NSCollectionLayoutItem(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .fractionalHeight(1)
-                    )
-                )
-                
-                let group = NSCollectionLayoutGroup.horizontal(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .absolute(containerSize.width * 0.8),
-                        heightDimension: .fractionalWidth(0.6)
-                    ),
-                    subitems: [item]
-                )
-                
-                let section = NSCollectionLayoutSection(group: group)
-                section.interGroupSpacing = containerSize.width * 0.05
-                section.orthogonalScrollingBehavior = .groupPagingCentered
-                section.boundarySupplementaryItems = [headerItem]
+                let section = self?.makeSpringSectionLayout(environment: environment)
+                section?.boundarySupplementaryItems = [headerItem]
                 
                 return section
                 
             default:
-                let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
-                let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: environment)
+                let section = self?.makeListSectionLayout(environment: environment)
+                section?.boundarySupplementaryItems = [headerItem]
+                
                 return section
             }
         }, configuration: configuration)
+    }
+    
+    // 봄 섹션 레이아웃 생성
+    private func makeSpringSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {        
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)
+            )
+        )
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.95),
+                heightDimension: .fractionalWidth(0.6)
+            ),
+            subitems: [item]
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 10
+        section.orthogonalScrollingBehavior = .groupPaging
+        
+        return section
+    }
+    
+    // 곡 목록 섹션 레이아웃 생성
+    private func makeListSectionLayout(environment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(80)
+            )
+        )
+        
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(250)
+            ),
+            repeatingSubitem: item,
+            count: 3
+            )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .groupPaging
+//        section.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 40)
+        
+        return section
     }
 }
