@@ -13,6 +13,8 @@ import RxCocoa
 
 class HomeViewController: UIViewController {
 
+    weak var coordinator: AppCoordinator?
+    
     let disposeBag = DisposeBag()
     let viewModel = MusicViewModel()
     
