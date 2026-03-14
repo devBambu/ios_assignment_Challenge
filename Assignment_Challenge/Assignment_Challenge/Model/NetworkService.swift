@@ -8,7 +8,7 @@ import Alamofire
 import Foundation
 
 final class NetworkService {
-    func searchData<T: Codable>(url: URL) async throws -> T {
+    private func searchData<T: Codable>(url: URL) async throws -> T {
         let publisher = AF.request(url, method: .get)
             .validate()
             .serializingDecodable(T.self)
@@ -19,6 +19,30 @@ final class NetworkService {
         case .failure(let error):
             throw error
         }
+    }
+    
+    func searchMusic(of section: Section) async throws -> [Music] {
+        let query: (term: String, limit: Int) = switch section {
+        case .spring:
+            (term: "봄", limit: 5)
+        default:
+            (term: section.title, limit: 12)
+        }
+        
+        var urlComp = URLComponents(string: "https://itunes.apple.com/search?")
+        let queryItems = [
+            URLQueryItem(name: "term", value: query.term),
+            URLQueryItem(name: "country", value: "KR"),
+            URLQueryItem(name: "limit", value: "\(query.limit)"),
+            URLQueryItem(name: "media", value: "music")
+        ]
+        
+        urlComp?.queryItems = queryItems
+        
+        guard let url = urlComp?.url else { return [] }
+        
+        let response: MusicResponse = try await searchData(url: url)
+        return response.results
     }
     
     

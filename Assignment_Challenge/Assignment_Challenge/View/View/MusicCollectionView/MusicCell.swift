@@ -36,6 +36,7 @@ final class MusicCell: UICollectionViewCell {
         albumImageView.clipsToBounds = true
         
         titleLabel.font = .boldSystemFont(ofSize: 16)
+        titleLabel.numberOfLines = 1
 
         artistLabel.font = .systemFont(ofSize: 14, weight: .medium)
         
@@ -58,6 +59,7 @@ final class MusicCell: UICollectionViewCell {
         songLabelStack.snp.makeConstraints {
             $0.centerY.equalTo(albumImageView)
             $0.leading.equalTo(albumImageView.snp.trailing).offset(10)
+            $0.trailing.equalToSuperview().inset(20)
         }
     }
 }

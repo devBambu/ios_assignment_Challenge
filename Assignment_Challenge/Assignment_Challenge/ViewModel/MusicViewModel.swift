@@ -7,6 +7,9 @@
 import RxSwift
 
 final class MusicViewModel {
+    struct Input {
+        let viewDidload: Observable<Void>
+    }
     
     struct Output {
         let musics: Single<[[Item]]>
@@ -24,19 +27,66 @@ final class MusicViewModel {
             Music(trackId: 1008, title: "Stay", artist: "The Kid LAROI & Justin Bieber", collection: "F*CK LOVE 3: OVER YOU"),
             Music(trackId: 1009, title: "Super Shy", artist: "NewJeans", collection: "Get Up")
         ]
-
-        let spring = data.map { Item.spring($0) }
-        let summer = data.map { Item.summer($0) }
-        let autumn = data.map { Item.autumn($0) }
-        let winter = data.map { Item.winter($0) }
+//
+//        let spring = data.map { Item.spring($0) }
+//        let summer = data.map { Item.summer($0) }
+//        let autumn = data.map { Item.autumn($0) }
+//        let winter = data.map { Item.winter($0) }
         
+//        let musics = Single<[[Item]]>.create { observer in
+//            observer(.success([spring, summer, autumn, winter]))
+//            return Disposables.create()
+//        }
+                
         let musics = Single<[[Item]]>.create { observer in
-            observer(.success([spring, summer, autumn, winter]))
-            return Disposables.create()
+            let task = Task { [weak self] in
+                guard let self else { return }
+                do {
+                    let spring = try await self.networkService.searchMusic(of: .spring).map { Item.spring($0) }
+                    let summer = try await self.networkService.searchMusic(of: .summer).map { Item.summer($0) }
+                    let autumn = try await self.networkService.searchMusic(of: .autumn).map { Item.autumn($0) }
+                    let winter = try await self.networkService.searchMusic(of: .winter).map { Item.winter($0) }
+                    
+                    observer(.success([spring, summer, autumn, winter]))
+                } catch {
+                    observer(.failure(error))
+                }
+            }
+            
+            return Disposables.create() {
+                task.cancel() // 구독이 dispose될 때 진행중인 task를 cancel
+            }
         }
         
         return Output(
             musics: musics
             )
     }
+    
+    let networkService = NetworkService()
+    
+//    func fetchMusic(of section: Section) -> [Item] {
+//        let task = Task {
+//            let result = try await networkService.searchMusic(of: section)
+//            
+//        }
+//        
+//        Task {
+//            do {
+//                let result = try await networkService.searchMusic(of: section)
+//                switch section {
+//                case .spring:
+//                    return result.map { Item.spring($0) }
+//                case .summer:
+//                    return result.map { Item.spring($0) }
+//                case .autumn:
+//                    return result.map { Item.spring($0) }
+//                case .winter:
+//                    return result.map { Item.spring($0) }
+//                }
+//            } catch {
+//                throw error
+//            }
+//        }
+//    }
 }

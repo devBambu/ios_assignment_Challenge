@@ -43,6 +43,7 @@ class HomeViewController: UIViewController {
     
     //MARK: bind
     private func bind(viewModel: MusicViewModel) {
+                
         let output = viewModel.fetchMusics()
         
         output.musics
