@@ -52,7 +52,6 @@ final class MusicCell: UICollectionViewCell {
         albumImageView.snp.makeConstraints {
             $0.width.height.equalTo(60)
             $0.top.bottom.equalToSuperview().inset(10)
-//            $0.leading.equalToSuperview().inset(20)
             $0.leading.equalToSuperview()
         }
         

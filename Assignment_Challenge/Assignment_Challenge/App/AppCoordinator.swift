@@ -25,10 +25,8 @@ class AppCoordinator: Coordinator {
     }
     
     func start() {
-        let vc = HomeViewController()
+        let vc = HomeViewController(viewModel: MusicViewModel())
         vc.coordinator = self
         navigationController.pushViewController(vc, animated: true)
     }
-    
-    
 }

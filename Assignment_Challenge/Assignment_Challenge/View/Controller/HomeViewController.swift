@@ -14,12 +14,10 @@ import RxCocoa
 class HomeViewController: UIViewController {
 
     weak var coordinator: AppCoordinator?
+    let viewModel: MusicViewModel
     
     let disposeBag = DisposeBag()
-    let viewModel = MusicViewModel()
-    
     let homeView = HomeView()
-    
     private let searchController = UISearchController(searchResultsController: nil)
     
     override func loadView() {
@@ -30,11 +28,20 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         setNavigationController()
-        
         bind(viewModel: viewModel)
-
     }
     
+    //MARK: init
+    init(viewModel: MusicViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: bind
     private func bind(viewModel: MusicViewModel) {
         let output = viewModel.fetchMusics()
         

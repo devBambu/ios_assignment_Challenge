@@ -6,7 +6,7 @@
 //
 
 nonisolated
-struct Music: Hashable {
+struct Music: Codable, Hashable {
     var trackId: Int
     var title: String // 곡 제목
     var artist: String // 가수
@@ -18,5 +18,10 @@ struct Music: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(trackId)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case trackId
+        
     }
 }
