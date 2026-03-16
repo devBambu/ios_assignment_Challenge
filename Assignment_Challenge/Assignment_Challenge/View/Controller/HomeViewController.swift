@@ -48,11 +48,42 @@ class HomeViewController: UIViewController {
         
         let output = viewModel.transform(input)
         
-        output.musics
-            .subscribe(onSuccess: { [weak self] in
-                self?.homeView.setSnapshot(with: $0)
-            }, onFailure: {
-                print("\($0)")
+        let spring = output.spring
+            .map { musics in
+                musics.map {
+                    Item.spring($0)
+                }
+            }
+        
+        let summer = output.summer
+            .map { musics in
+                musics.map {
+                    Item.summer($0)
+                }
+            }
+        
+        let autumn = output.autumn
+            .map { musics in
+                musics.map {
+                    Item.autumn($0)
+                }
+            }
+        
+        let winter = output.winter
+            .map { musics in
+                musics.map {
+                    Item.winter($0)
+                }
+            }
+        
+        Observable
+            .combineLatest(spring, summer, autumn, winter)
+            .subscribe(
+                onNext: { [homeView] in
+                homeView.setSnapshot(with: [$0, $1, $2, $3])
+            },
+                onError: { [weak self] error in
+                    self?.showAlert(title: "Network Error", message: "데이터를 가져올 수 없습니다.\nError: \(error)")
             })
             .disposed(by: disposeBag)
     }
@@ -64,5 +95,12 @@ extension HomeViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
         navigationItem.preferredSearchBarPlacement = .stacked
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .cancel))
+        
+        present(alert, animated: true)
     }
 }

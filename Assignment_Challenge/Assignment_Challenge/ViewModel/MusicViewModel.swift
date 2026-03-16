@@ -19,10 +19,25 @@ final class MusicViewModel: ViewModel {
 }
     
     func transform(_ input: Input) -> Output {
-        let spring = networkService.rx.fetchMusic(of: .spring)
-        let summer = networkService.rx.fetchMusic(of: .summer)
-        let autumn = networkService.rx.fetchMusic(of: .autumn)
-        let winter = networkService.rx.fetchMusic(of: .winter)
+        let spring = input.fetchData
+            .flatMap { [networkService] in
+                networkService.rx.fetchMusic(of: .spring)
+            }
+        
+        let summer = input.fetchData
+            .flatMap { [networkService] in
+                networkService.rx.fetchMusic(of: .summer)
+            }
+        
+        let autumn = input.fetchData
+            .flatMap { [networkService] in
+                networkService.rx.fetchMusic(of: .autumn)
+            }
+        
+        let winter = input.fetchData
+            .flatMap { [networkService] in
+                networkService.rx.fetchMusic(of: .winter)
+            }
 
         return Output(
             spring: spring,
