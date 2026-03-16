@@ -10,7 +10,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-
 class HomeViewController: UIViewController {
 
     weak var coordinator: AppCoordinator?
@@ -26,7 +25,6 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         setNavigationController()
         bind()
@@ -76,6 +74,7 @@ class HomeViewController: UIViewController {
                 }
             }
         
+        // 컬렉션뷰 바인딩
         Observable
             .combineLatest(spring, summer, autumn, winter)
             .subscribe(

@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class MusicCell: UICollectionViewCell {
     static let id = "MusicListCell"
@@ -28,8 +29,7 @@ final class MusicCell: UICollectionViewCell {
     }
     
     private func setAttributes() {
-        let config = UIImage.SymbolConfiguration(hierarchicalColor: .secondaryWhite)
-        albumImageView.image = UIImage(systemName: "music.note", withConfiguration: config) // 이미지 기본값 - 음표 이미지
+        albumImageView.kf.indicatorType = .activity
         albumImageView.contentMode = .center
         albumImageView.backgroundColor = .systemGray4
         albumImageView.layer.cornerRadius = 10
@@ -70,5 +70,14 @@ extension MusicCell {
         artistLabel.text = music.artist
         collectionLabel.text = music.collection
         
+        // 이미지
+        let imageUrl = URL(string: music.artworkUrl60 ?? "")
+        let config = UIImage.SymbolConfiguration(hierarchicalColor: .secondaryWhite) // placeholder 이미지 config
+
+        albumImageView.kf.setImage(
+            with: imageUrl,
+            placeholder: UIImage(systemName: "music.note", withConfiguration: config), // 이미지를 가져오지 못했을 경우 나타낼 이미지
+            options: [.transition(.fade(1.2))] // 1.2초 내에 이미지를 가져오지 못하면 애니메이션 표출
+        )
     }
 }
