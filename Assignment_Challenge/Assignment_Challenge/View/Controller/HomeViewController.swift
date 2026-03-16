@@ -27,6 +27,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         setNavigationController()
         bind(viewModel: viewModel)
     }
