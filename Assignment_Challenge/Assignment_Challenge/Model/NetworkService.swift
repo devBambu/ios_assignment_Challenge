@@ -50,21 +50,21 @@ final class NetworkService {
 extension NetworkService: ReactiveCompatible { }
 
 extension Reactive where Base: NetworkService {
-    func fetchMusic(of section: Section) -> Single<[Music]> {
-        Single.create { [base] observer in
+    func fetchMusic(of section: Section) -> Observable<[Music]> {
+        Observable.create { [base] observer in
             let task = Task {
                 do {
                     let result = try await base.searchMusic(of: section)
-                    
-                    let b = result.map { Item.spring($0) }
-                    observer(.success(result))
+                    observer.on(.next(result))
+                    observer.on(.completed)
                 } catch {
-                    observer(.failure(error))
+                    observer.on(.error(error))
                 }
             }
             
             return Disposables.create {
-                task.cancel()
+                task.cancel() // 구독이 dispose될 때 진행중인 task를 cancel
+
             }
         }
     }

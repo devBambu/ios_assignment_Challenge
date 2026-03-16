@@ -12,32 +12,23 @@ final class MusicViewModel: ViewModel {
     }
     
     struct Output {
-        let musics: Single<[[Item]]> // Observable로 바꾸기 Single은 한번 보내고 바인딩 풀림 -- transform 다시 해야함
+        let spring: Observable<[Music]>
+        let summer: Observable<[Music]>
+        let autumn: Observable<[Music]>
+        let winter: Observable<[Music]>
 }
     
     func transform(_ input: Input) -> Output {
-        let musics = Single<[[Item]]>.create { observer in
-            let task = Task { [weak self] in
-                guard let self else { return }
-                do {
-                    let spring = try await self.networkService.searchMusic(of: .spring).map { Item.spring($0) }
-                    let summer = try await self.networkService.searchMusic(of: .summer).map { Item.summer($0) }
-                    let autumn = try await self.networkService.searchMusic(of: .autumn).map { Item.autumn($0) }
-                    let winter = try await self.networkService.searchMusic(of: .winter).map { Item.winter($0) }
-                    
-                    observer(.success([spring, summer, autumn, winter]))
-                } catch {
-                    observer(.failure(error))
-                }
-            }
-            
-            return Disposables.create() {
-                task.cancel() // 구독이 dispose될 때 진행중인 task를 cancel
-            }
-        }
-        
+        let spring = networkService.rx.fetchMusic(of: .spring)
+        let summer = networkService.rx.fetchMusic(of: .summer)
+        let autumn = networkService.rx.fetchMusic(of: .autumn)
+        let winter = networkService.rx.fetchMusic(of: .winter)
+
         return Output(
-            musics: musics
+            spring: spring,
+            summer: summer,
+            autumn: autumn,
+            winter: winter
             )
     }
     
