@@ -29,7 +29,7 @@ class HomeViewController: UIViewController {
         
         
         setNavigationController()
-        bind(viewModel: viewModel)
+        bind()
     }
     
     //MARK: init
@@ -43,9 +43,10 @@ class HomeViewController: UIViewController {
     }
     
     //MARK: bind
-    private func bind(viewModel: MusicViewModel) {
-                
-        let output = viewModel.fetchMusics()
+    private func bind() {
+        let input = MusicViewModel.Input(fetchData: .just(()))
+        
+        let output = viewModel.transform(input)
         
         output.musics
             .subscribe(onSuccess: { [weak self] in

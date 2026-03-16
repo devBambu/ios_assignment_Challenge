@@ -6,6 +6,7 @@
 //
 import Alamofire
 import Foundation
+import RxSwift
 
 final class NetworkService {
     private func searchData<T: Codable>(url: URL) async throws -> T {
@@ -44,6 +45,29 @@ final class NetworkService {
         let response: MusicResponse = try await searchData(url: url)
         return response.results
     }
-    
-    
 }
+
+extension NetworkService: ReactiveCompatible { }
+
+extension Reactive where Base: NetworkService {
+    func fetchMusic(of section: Section) -> Single<[Music]> {
+        Single.create { [base] observer in
+            let task = Task {
+                do {
+                    let result = try await base.searchMusic(of: section)
+                    
+                    let b = result.map { Item.spring($0) }
+                    observer(.success(result))
+                } catch {
+                    observer(.failure(error))
+                }
+            }
+            
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+}
+
+

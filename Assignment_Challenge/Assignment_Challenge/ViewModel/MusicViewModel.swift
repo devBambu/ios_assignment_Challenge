@@ -8,12 +8,12 @@ import RxSwift
 
 final class MusicViewModel: ViewModel {
     struct Input {
-        let viewDidload: Observable<Void>
+        let fetchData: Observable<Void>
     }
     
     struct Output {
-        let musics: Single<[[Item]]>
-    }
+        let musics: Single<[[Item]]> // Observable로 바꾸기 Single은 한번 보내고 바인딩 풀림 -- transform 다시 해야함
+}
     
     func transform(_ input: Input) -> Output {
         let musics = Single<[[Item]]>.create { observer in

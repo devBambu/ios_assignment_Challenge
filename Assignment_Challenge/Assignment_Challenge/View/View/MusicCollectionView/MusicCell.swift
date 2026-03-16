@@ -69,5 +69,6 @@ extension MusicCell {
         titleLabel.text = music.title
         artistLabel.text = music.artist
         collectionLabel.text = music.collection
+        
     }
 }
