@@ -23,39 +23,33 @@ final class HomeViewModel: ViewModel {
     }
     
     func transform(_ input: Input) -> Output {
-        // Music
-        let fetchData = input.fetchData.share()
-        
-        let spring = fetchData
+        let spring = input.fetchData
             .flatMap { [networkService] in
                 networkService.rx.fetchMusic(of: .spring)
             }
         
-        let summer = fetchData
+        let summer = input.fetchData
             .flatMap { [networkService] in
                 networkService.rx.fetchMusic(of: .summer)
             }
         
-        let autumn = fetchData
+        let autumn = input.fetchData
             .flatMap { [networkService] in
                 networkService.rx.fetchMusic(of: .autumn)
             }
         
-        let winter = fetchData
+        let winter = input.fetchData
             .flatMap { [networkService] in
                 networkService.rx.fetchMusic(of: .winter)
             }
         
-        // TVShow, Podcast
-        let searchText = input.searchText.share()
-        
-        let tvShow = searchText
-            .flatMapLatest { [networkService] in
+        let tvShow = input.searchText
+            .flatMap { [networkService] in
                 networkService.rx.searchTvShow(with: $0)
             }
         
-        let podcast = searchText
-            .flatMapLatest { [networkService] in
+        let podcast = input.searchText
+            .flatMap { [networkService] in
                 networkService.rx.searchPodcast(with: $0)
             }
 
