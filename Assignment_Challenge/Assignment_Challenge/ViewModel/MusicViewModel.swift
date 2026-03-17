@@ -47,5 +47,9 @@ final class MusicViewModel: ViewModel {
             )
     }
     
-    let networkService = NetworkService()
+    let networkService: NetworkService
+    
+    init(networkService: NetworkService) {
+        self.networkService = networkService
+    }
 }

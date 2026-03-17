@@ -24,12 +24,14 @@ class AppCoordinator: Coordinator {
     var children: [Coordinator] = []
     var navigationController: UINavigationController
     
+    let networkService = NetworkService()
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
     func start() {
-        let vc = HomeViewController(viewModel: MusicViewModel())
+        let vc = HomeViewController(viewModel: MusicViewModel(networkService: networkService))
         vc.coordinator = self
         
         setupSearchController(for: vc)

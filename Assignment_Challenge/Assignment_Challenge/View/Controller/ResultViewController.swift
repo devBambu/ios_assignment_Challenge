@@ -20,7 +20,15 @@ final class ResultViewController: UIViewController {
 
 extension ResultViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        print(searchController.searchBar.searchTextField.text)
+        let text = searchController.searchBar.searchTextField.text
+        Task {
+            do {
+                let response = try await NetworkService().searchTvShow(with: text ?? "")
+                print(response)
+            } catch {
+                print(error)
+            }
+        }
     }
     
     
