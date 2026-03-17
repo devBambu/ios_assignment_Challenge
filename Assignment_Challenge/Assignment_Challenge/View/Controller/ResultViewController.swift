@@ -43,6 +43,7 @@ final class ResultViewController: UIViewController {
         let output = viewModel.transform(input)
         
         output.tvShow
+            .debug("search tvShow")
             .subscribe(onNext: {
                 print($0)
             }, onError: {
@@ -51,6 +52,7 @@ final class ResultViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.podcast
+            .debug("search podcast")
             .subscribe(onNext: {
                 print($0)
             }, onError: {
