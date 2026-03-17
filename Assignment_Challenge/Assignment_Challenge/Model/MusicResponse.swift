@@ -9,13 +9,3 @@ nonisolated
 struct MusicResponse: Codable {
     let results: [Music]
 }
-
-nonisolated
-struct TvShowResponse: Codable {
-    let results: [TvShow]
-}
-
-nonisolated
-struct PodcastResponse: Codable {
-    let results: [Podcast]
-}
