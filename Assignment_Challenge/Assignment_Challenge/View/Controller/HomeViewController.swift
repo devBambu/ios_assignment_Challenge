@@ -17,7 +17,6 @@ class HomeViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     let homeView = HomeView()
-    private let searchController = UISearchController(searchResultsController: ResultViewController())
     
     override func loadView() {
         view = homeView
@@ -92,10 +91,7 @@ extension HomeViewController {
     private func setNavigationController() {
         self.title = "Music"
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.searchController = searchController
         navigationItem.preferredSearchBarPlacement = .stacked
-        navigationItem.hidesSearchBarWhenScrolling = false // 스크롤 시 검색바 고정
-        navigationItem.searchController?.obscuresBackgroundDuringPresentation = true
     }
     
     private func showAlert(title: String, message: String) {

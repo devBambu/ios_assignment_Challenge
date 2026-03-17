@@ -17,3 +17,11 @@ final class ResultViewController: UIViewController {
         print("result view loaded")
     }
 }
+
+extension ResultViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        print(searchController.searchBar.searchTextField.text)
+    }
+    
+    
+}
