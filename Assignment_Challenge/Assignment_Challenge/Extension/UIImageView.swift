@@ -10,7 +10,7 @@ import SnapKit
 import Kingfisher
 
 extension UIImageView {
-
+    // 이미지 캐싱 활용
     func setImage(with urlString: String) {
         self.kf.indicatorType = .activity // 이미지 다운로드가 진행중일 경우 인디케이터 표시 옵션
         
