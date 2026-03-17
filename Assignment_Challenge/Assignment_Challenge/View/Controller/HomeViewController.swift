@@ -13,12 +13,11 @@ import RxCocoa
 class HomeViewController: UIViewController {
 
     weak var coordinator: AppCoordinator?
-    private let viewModel: HomeViewModel
+    let viewModel: MusicViewModel
     
-    private let disposeBag = DisposeBag()
-    private let homeView = HomeView()
-    
-    let searchKeywordRelay = BehaviorRelay<String>(value: "")
+    let disposeBag = DisposeBag()
+    let homeView = HomeView()
+    private let searchController = UISearchController(searchResultsController: nil)
     
     override func loadView() {
         view = homeView
@@ -32,7 +31,7 @@ class HomeViewController: UIViewController {
     }
     
     //MARK: init
-    init(viewModel: HomeViewModel) {
+    init(viewModel: MusicViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -43,17 +42,7 @@ class HomeViewController: UIViewController {
     
     //MARK: bind
     private func bind() {
-        if let searchBar = navigationItem.searchController?.searchBar {
-            searchBar.rx.text.orEmpty
-                .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-                .bind(to: searchKeywordRelay)
-                .disposed(by: disposeBag)
-        }
-        
-        let input = HomeViewModel.Input(
-            fetchData: .just(()),
-            searchText: .empty()
-        )
+        let input = MusicViewModel.Input(fetchData: .just(()))
         
         let output = viewModel.transform(input)
         
@@ -103,6 +92,7 @@ extension HomeViewController {
     private func setNavigationController() {
         self.title = "Music"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.searchController = searchController
         navigationItem.preferredSearchBarPlacement = .stacked
     }
     

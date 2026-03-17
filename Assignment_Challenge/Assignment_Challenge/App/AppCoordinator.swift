@@ -5,12 +5,7 @@
 //  Created by t2025-m0143 on 3/13/26.
 //
 
-/*
- 화면 전환 및 의존성 주입을 담당하는 coordinator 객체입니다.
- */
-
 import UIKit
-import RxSwift
 
 protocol Coordinator: AnyObject {
     var parentCoordinator: Coordinator? { get set }
@@ -25,28 +20,13 @@ class AppCoordinator: Coordinator {
     var children: [Coordinator] = []
     var navigationController: UINavigationController
     
-    let networkService = NetworkService()
-    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
     func start() {
-        let vc = HomeViewController(viewModel: HomeViewModel(networkService: networkService))
+        let vc = HomeViewController(viewModel: MusicViewModel())
         vc.coordinator = self
-        
-        setupSearchController(for: vc)
         navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func setupSearchController(for vc: HomeViewController) {
-        let resultVC = ResultViewController(viewModel: HomeViewModel(networkService: networkService), searchKeyword: vc.searchKeywordRelay.asObservable())
-        let searchController = UISearchController(searchResultsController: resultVC)
-        
-        searchController.obscuresBackgroundDuringPresentation = false // 검색바 클릭시 반투명하게 보이기
-        searchController.searchBar.placeholder = "TV 프로그램, 팟캐스트"
-        
-        vc.navigationItem.searchController = searchController
-        vc.navigationItem.hidesSearchBarWhenScrolling = false // 스크롤 시 검색바 고정
     }
 }
