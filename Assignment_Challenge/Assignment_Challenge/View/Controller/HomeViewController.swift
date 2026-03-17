@@ -13,7 +13,7 @@ import RxCocoa
 class HomeViewController: UIViewController {
 
     weak var coordinator: AppCoordinator?
-    private let viewModel: HomeViewModel
+    let viewModel: HomeViewModel
     
     private let disposeBag = DisposeBag()
     private let homeView = HomeView()

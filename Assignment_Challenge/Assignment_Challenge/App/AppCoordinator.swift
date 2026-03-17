@@ -39,17 +39,17 @@ class AppCoordinator: Coordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func setupSearchController(for vc: HomeViewController) {
+    func setupSearchController(for homeVC: HomeViewController) {
         let resultVC = ResultViewController(
-            viewModel: HomeViewModel(networkService: networkService),
-            searchKeyword: vc.searchKeywordRelay.asObservable()
+            viewModel: homeVC.viewModel,
+            searchKeyword: homeVC.searchKeywordRelay.asObservable()
         )
         let searchController = UISearchController(searchResultsController: resultVC)
         
         searchController.obscuresBackgroundDuringPresentation = false // 검색바 클릭시 반투명하게 보이기
         searchController.searchBar.placeholder = "TV 프로그램, 팟캐스트"
         
-        vc.navigationItem.searchController = searchController
-        vc.navigationItem.hidesSearchBarWhenScrolling = false // 스크롤 시 검색바 고정
+        homeVC.navigationItem.searchController = searchController
+        homeVC.navigationItem.hidesSearchBarWhenScrolling = false // 스크롤 시 검색바 고정
     }
 }
