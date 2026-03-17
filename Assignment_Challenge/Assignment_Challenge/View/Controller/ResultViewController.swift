@@ -12,15 +12,20 @@ import RxCocoa
 final class ResultViewController: UIViewController {
     
     private let viewModel: SearchViewModel
+    private let disposeBag = DisposeBag()
+    
+    private let searchKeyword: Observable<String>
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bind()
         print("result view loaded")
     }
     
     //MARK: init
-    init(viewModel: SearchViewModel) {
+    init(viewModel: SearchViewModel, searchKeyword: Observable<String>) {
         self.viewModel = viewModel
+        self.searchKeyword = searchKeyword
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -30,14 +35,24 @@ final class ResultViewController: UIViewController {
     
     //MARK: bind
     private func bind() {
+        let input = SearchViewModel.Input(
+            searchText: searchKeyword
+        )
         
+        let output = viewModel.transform(input)
+        
+        output.tvShow
+            .subscribe(onNext: {
+                let a = $0
+            }, onError: {
+                print($0)
+            })
+            .disposed(by: disposeBag)
     }
+    
+//    private func bind() {
+//        let output = viewModel.transform(<#T##input: SearchViewModel.Input##SearchViewModel.Input#>)
+//    }
+
 }
 
-extension ResultViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        let text = searchController.searchBar.searchTextField.text
-    }
-    
-    
-}

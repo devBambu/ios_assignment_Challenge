@@ -12,11 +12,13 @@ import RxCocoa
 
 class HomeViewController: UIViewController {
 
-    weak private var coordinator: AppCoordinator?
+    weak var coordinator: AppCoordinator?
     private let viewModel: MusicViewModel
     
     private let disposeBag = DisposeBag()
     private let homeView = HomeView()
+    
+    let searchKeywordRelay = BehaviorRelay<String>(value: "")
     
     override func loadView() {
         view = homeView
@@ -41,6 +43,13 @@ class HomeViewController: UIViewController {
     
     //MARK: bind
     private func bind() {
+        if let searchBar = navigationItem.searchController?.searchBar {
+            searchBar.rx.text.orEmpty
+                .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+                .bind(to: searchKeywordRelay)
+                .disposed(by: disposeBag)
+        }
+        
         let input = MusicViewModel.Input(fetchData: .just(()))
         
         let output = viewModel.transform(input)

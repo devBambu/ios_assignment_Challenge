@@ -10,6 +10,7 @@
  */
 
 import UIKit
+import RxSwift
 
 protocol Coordinator: AnyObject {
     var parentCoordinator: Coordinator? { get set }
@@ -38,11 +39,10 @@ class AppCoordinator: Coordinator {
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func setupSearchController(for vc: UIViewController) {
-        let resultVC = ResultViewController(viewModel: SearchViewModel(networkService: networkService))
+    func setupSearchController(for vc: HomeViewController) {
+        let resultVC = ResultViewController(viewModel: SearchViewModel(networkService: networkService), searchKeyword: vc.searchKeywordRelay.asObservable())
         let searchController = UISearchController(searchResultsController: resultVC)
         
-        searchController.searchResultsUpdater = resultVC
         searchController.obscuresBackgroundDuringPresentation = false // 검색바 클릭시 반투명하게 보이기
         searchController.searchBar.placeholder = "TV 프로그램, 팟캐스트"
         
