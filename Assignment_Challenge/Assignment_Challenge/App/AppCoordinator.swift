@@ -39,7 +39,7 @@ class AppCoordinator: Coordinator {
     }
     
     func setupSearchController(for vc: UIViewController) {
-        let resultVC = ResultViewController()
+        let resultVC = ResultViewController(viewModel: SearchViewModel(networkService: networkService))
         let searchController = UISearchController(searchResultsController: resultVC)
         
         searchController.searchResultsUpdater = resultVC
