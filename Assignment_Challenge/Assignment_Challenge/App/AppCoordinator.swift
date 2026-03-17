@@ -40,10 +40,7 @@ class AppCoordinator: Coordinator {
     }
     
     func setupSearchController(for vc: HomeViewController) {
-        let resultVC = ResultViewController(
-            viewModel: HomeViewModel(networkService: networkService),
-            searchKeyword: vc.searchKeywordRelay.asObservable()
-        )
+        let resultVC = ResultViewController(viewModel: HomeViewModel(networkService: networkService), searchKeyword: vc.searchKeywordRelay.asObservable())
         let searchController = UISearchController(searchResultsController: resultVC)
         
         searchController.obscuresBackgroundDuringPresentation = false // 검색바 클릭시 반투명하게 보이기
