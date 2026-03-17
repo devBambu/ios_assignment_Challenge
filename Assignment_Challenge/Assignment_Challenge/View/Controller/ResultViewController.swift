@@ -49,6 +49,14 @@ final class ResultViewController: UIViewController {
                 print($0)
             })
             .disposed(by: disposeBag)
+        
+        output.podcast
+            .subscribe(onNext: {
+                print($0)
+            }, onError: {
+                print($0)
+            })
+            .disposed(by: disposeBag)
     }
 
 }
