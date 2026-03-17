@@ -10,14 +10,13 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-
 class HomeViewController: UIViewController {
 
+    weak var coordinator: AppCoordinator?
+    let viewModel: MusicViewModel
+    
     let disposeBag = DisposeBag()
-    let viewModel = MusicViewModel()
-    
     let homeView = HomeView()
-    
     private let searchController = UISearchController(searchResultsController: nil)
     
     override func loadView() {
@@ -28,19 +27,62 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         setNavigationController()
-        
-        bind(viewModel: viewModel)
-
+        bind()
     }
     
-    private func bind(viewModel: MusicViewModel) {
-        let output = viewModel.fetchMusics()
+    //MARK: init
+    init(viewModel: MusicViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: bind
+    private func bind() {
+        let input = MusicViewModel.Input(fetchData: .just(()))
         
-        output.musics
-            .subscribe(onSuccess: { [weak self] in
-                self?.homeView.setSnapshot(with: $0)
-            }, onFailure: {
-                print("\($0)")
+        let output = viewModel.transform(input)
+        
+        let spring = output.spring
+            .map { musics in
+                musics.map {
+                    Item.spring($0)
+                }
+            }
+        
+        let summer = output.summer
+            .map { musics in
+                musics.map {
+                    Item.summer($0)
+                }
+            }
+        
+        let autumn = output.autumn
+            .map { musics in
+                musics.map {
+                    Item.autumn($0)
+                }
+            }
+        
+        let winter = output.winter
+            .map { musics in
+                musics.map {
+                    Item.winter($0)
+                }
+            }
+        
+        // 컬렉션뷰 바인딩
+        Observable
+            .combineLatest(spring, summer, autumn, winter)
+            .subscribe(
+                onNext: { [homeView] in
+                homeView.setSnapshot(with: [$0, $1, $2, $3])
+            },
+                onError: { [weak self] error in
+                    self?.showAlert(title: "Network Error", message: "데이터를 가져올 수 없습니다.\nError: \(error)")
             })
             .disposed(by: disposeBag)
     }
@@ -52,5 +94,12 @@ extension HomeViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = searchController
         navigationItem.preferredSearchBarPlacement = .stacked
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .cancel))
+        
+        present(alert, animated: true)
     }
 }
