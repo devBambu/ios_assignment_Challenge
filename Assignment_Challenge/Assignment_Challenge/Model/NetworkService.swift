@@ -88,15 +88,14 @@ final class NetworkService {
 extension NetworkService: ReactiveCompatible { }
 
 extension Reactive where Base: NetworkService {
-    func fetchMusic(of section: Section) -> Observable<[Music]> {
-        Observable.create { [base] observer in
+    func fetchMusic(of section: Section) -> Single<[Music]> {
+        Single.create { [base] observer in
             let task = Task {
                 do {
                     let result = try await base.fetchMusic(of: section)
-                    observer.on(.next(result))
-                    observer.on(.completed)
+                    observer(.success(result))
                 } catch {
-                    observer.on(.error(error))
+                    observer(.failure(error))
                 }
             }
             
