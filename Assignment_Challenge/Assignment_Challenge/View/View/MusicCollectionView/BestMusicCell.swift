@@ -100,13 +100,7 @@ extension BestMusicCell {
     func configure(with music: Music) {
         titleLabel.text = music.title
         artistLabel.text = music.artist
-
-        let imageUrl = URL(string: music.artworkUrl60 ?? "")
-        albumImageView.kf.setImage(
-            with: imageUrl,
-            placeholder: noteImage, // 이미지를 가져오지 못했을 경우 나타낼 이미지
-            options: [.transition(.fade(1.2))] // 1.2초 내에 이미지를 가져오지 못하면 애니메이션 표출
-        )
+        albumImageView.setImage(with: music.artworkUrl60 ?? "")
     }
 }
 
