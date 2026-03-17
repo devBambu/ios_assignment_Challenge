@@ -40,7 +40,7 @@ final class NetworkService {
         
         urlComp?.queryItems = queryItems
         
-        guard let url = urlComp?.url else { return [] }
+        guard let url = urlComp?.url else { throw NetworkError.invalidURL }
         
         let response: MusicResponse = try await searchData(url: url)
         return response.results
