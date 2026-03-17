@@ -13,7 +13,7 @@ import RxCocoa
 class HomeViewController: UIViewController {
 
     weak var coordinator: AppCoordinator?
-    private let viewModel: MusicViewModel
+    private let viewModel: HomeViewModel
     
     private let disposeBag = DisposeBag()
     private let homeView = HomeView()
@@ -32,7 +32,7 @@ class HomeViewController: UIViewController {
     }
     
     //MARK: init
-    init(viewModel: MusicViewModel) {
+    init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -50,7 +50,10 @@ class HomeViewController: UIViewController {
                 .disposed(by: disposeBag)
         }
         
-        let input = MusicViewModel.Input(fetchData: .just(()))
+        let input = HomeViewModel.Input(
+            fetchData: .just(()),
+            searchText: .empty()
+        )
         
         let output = viewModel.transform(input)
         

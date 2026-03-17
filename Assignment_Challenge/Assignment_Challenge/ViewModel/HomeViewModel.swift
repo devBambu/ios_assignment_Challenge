@@ -6,10 +6,10 @@
 //
 import RxSwift
 
-final class MusicViewModel: ViewModel {
+final class HomeViewModel: ViewModel {
     struct Input {
         let fetchData: Observable<Void>
-//        let searchText: Observable<String>
+        let searchText: Observable<String>
     }
     
     struct Output {
@@ -18,8 +18,8 @@ final class MusicViewModel: ViewModel {
         let autumn: Observable<[Music]>
         let winter: Observable<[Music]>
         
-//        let tvShow: Observable<[TvShow]>
-//        let podcast: Observable<[Podcast]>
+        let tvShow: Observable<[TvShow]>
+        let podcast: Observable<[Podcast]>
     }
     
     func transform(_ input: Input) -> Output {
@@ -43,23 +43,23 @@ final class MusicViewModel: ViewModel {
                 networkService.rx.fetchMusic(of: .winter)
             }
         
-//        let tvShow = input.searchText
-//            .flatMap { [networkService] in
-//                networkService.rx.searchTvShow(with: $0)
-//            }
-//        
-//        let podcast = input.searchText
-//            .flatMap { [networkService] in
-//                networkService.rx.searchPodcast(with: $0)
-//            }
+        let tvShow = input.searchText
+            .flatMap { [networkService] in
+                networkService.rx.searchTvShow(with: $0)
+            }
+        
+        let podcast = input.searchText
+            .flatMap { [networkService] in
+                networkService.rx.searchPodcast(with: $0)
+            }
 
         return Output(
             spring: spring,
             summer: summer,
             autumn: autumn,
             winter: winter,
-//            tvShow: tvShow,
-//            podcast: podcast
+            tvShow: tvShow,
+            podcast: podcast
             )
     }
     

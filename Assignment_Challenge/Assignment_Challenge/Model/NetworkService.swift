@@ -130,8 +130,7 @@ extension Reactive where Base: NetworkService {
             let task = Task {
                 do {
                     let result = try await base.searchTvShow(with: text)
-//                    observer.on(.next(result))
-                    observer.on(.next([]))
+                    observer.on(.next(result))
                     observer.on(.completed)
                 } catch {
                     observer.on(.error(error))

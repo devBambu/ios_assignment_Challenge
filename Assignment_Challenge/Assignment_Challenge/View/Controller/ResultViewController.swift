@@ -11,7 +11,7 @@ import RxCocoa
 
 final class ResultViewController: UIViewController {
     
-    private let viewModel: SearchViewModel
+    private let viewModel: HomeViewModel
     private let disposeBag = DisposeBag()
     
     private let searchKeyword: Observable<String>
@@ -23,7 +23,7 @@ final class ResultViewController: UIViewController {
     }
     
     //MARK: init
-    init(viewModel: SearchViewModel, searchKeyword: Observable<String>) {
+    init(viewModel: HomeViewModel, searchKeyword: Observable<String>) {
         self.viewModel = viewModel
         self.searchKeyword = searchKeyword
         super.init(nibName: nil, bundle: nil)
@@ -35,7 +35,8 @@ final class ResultViewController: UIViewController {
     
     //MARK: bind
     private func bind() {
-        let input = SearchViewModel.Input(
+        let input = HomeViewModel.Input(
+            fetchData: .empty(),
             searchText: searchKeyword
         )
         
@@ -43,16 +44,12 @@ final class ResultViewController: UIViewController {
         
         output.tvShow
             .subscribe(onNext: {
-                let a = $0
+                print($0)
             }, onError: {
                 print($0)
             })
             .disposed(by: disposeBag)
     }
-    
-//    private func bind() {
-//        let output = viewModel.transform(<#T##input: SearchViewModel.Input##SearchViewModel.Input#>)
-//    }
 
 }
 
