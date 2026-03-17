@@ -12,7 +12,7 @@ struct MusicResponse: Codable {
 
 nonisolated
 struct TvShowResponse: Codable {
-    let results = [TvShow]
+    let results: [TvShow]
 }
 
 nonisolated

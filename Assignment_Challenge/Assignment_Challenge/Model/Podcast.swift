@@ -8,7 +8,7 @@
 nonisolated
 struct Podcast: Codable, Hashable {
     var trackId: Int
-    var kind: String // 종류 (Podcast or tv-episode)
+    var kind: String // 종류 (podcast or tv-episode)
     
     var title: String // 팟캐스트 이름
     var artist: String // 아티스트
