@@ -28,5 +28,5 @@ final class SearchViewModel: ViewModel {
         self.networkService = networkService
     }
     
-    let networkService: NetworkService
+    private let networkService: NetworkService
 }

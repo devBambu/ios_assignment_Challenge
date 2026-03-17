@@ -25,7 +25,7 @@ final class NetworkService {
     }
     
     // 음악 정보
-    func fetchMusic(of section: Section) async throws -> [Music] {
+    fileprivate func fetchMusic(of section: Section) async throws -> [Music] {
         let query: (term: String, limit: Int) = switch section {
         case .spring:
             (term: "봄", limit: 5)
@@ -50,7 +50,7 @@ final class NetworkService {
     }
     
     // 팟캐스트 검색
-    func searchPodcast(with text: String) async throws -> [Podcast] {
+    fileprivate func searchPodcast(with text: String) async throws -> [Podcast] {
         var urlComp = URLComponents(string: baseURL)
         let queryItems = [
             URLQueryItem(name: "term", value: text),
@@ -68,7 +68,7 @@ final class NetworkService {
     }
     
     // tvShow 검색
-    func searchTvShow(with text: String) async throws -> [TvShow] {
+    fileprivate func searchTvShow(with text: String) async throws -> [TvShow] {
         var urlComp = URLComponents(string: baseURL)
         let queryItems = [
             URLQueryItem(name: "term", value: text),

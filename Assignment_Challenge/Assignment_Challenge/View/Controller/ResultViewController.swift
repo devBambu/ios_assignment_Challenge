@@ -27,19 +27,16 @@ final class ResultViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: bind
+    private func bind() {
+        
+    }
 }
 
 extension ResultViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let text = searchController.searchBar.searchTextField.text
-        Task {
-            do {
-                let response = try await NetworkService().searchTvShow(with: text ?? "")
-                print(response)
-            } catch {
-                print(error)
-            }
-        }
     }
     
     

@@ -12,11 +12,11 @@ import RxCocoa
 
 class HomeViewController: UIViewController {
 
-    weak var coordinator: AppCoordinator?
-    let viewModel: MusicViewModel
+    weak private var coordinator: AppCoordinator?
+    private let viewModel: MusicViewModel
     
-    let disposeBag = DisposeBag()
-    let homeView = HomeView()
+    private let disposeBag = DisposeBag()
+    private let homeView = HomeView()
     
     override func loadView() {
         view = homeView
