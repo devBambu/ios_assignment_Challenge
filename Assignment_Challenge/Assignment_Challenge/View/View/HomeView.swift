@@ -54,7 +54,7 @@ extension HomeView {
             supplementaryView.configure(with: Section(rawValue: indexPath.section) ?? Section.spring)
         }
         
-        let bestMusicCellRegistration = UICollectionView.CellRegistration<BestMusicCell, Item> { [weak self] cell, indexPath, item in
+        let bestMusicCellRegistration = UICollectionView.CellRegistration<MusicCardCell, Item> { [weak self] cell, indexPath, item in
             guard let music = self?.convert(item: item) else { return }
             cell.configure(with: music)
         }

@@ -1,27 +1,22 @@
 //
-//  BestMusicCell.swift
+//  ResultCardCell.swift
 //  Assignment_Challenge
 //
-//  Created by t2025-m0143 on 3/12/26.
+//  Created by t2025-m0143 on 3/18/26.
 //
 
 import UIKit
 import SnapKit
 import Kingfisher
 
-final class BestMusicCell: UICollectionViewCell {
-    static let id = "BestMusicCell"
+final class ResultCardCell: UICollectionViewCell {
+    static let id = "ResultCardCell"
+    
+    let titleLabel = UILabel()
+    let secondaryLabel = UILabel()
     
     let noteView = UIView()
-    let albumImageView = UIImageView()
-    let titleLabel = UILabel()
-    let artistLabel = UILabel()
-    
-    // 음표 이미지 - 이미지 기본값으로 사용
-    let noteImage: UIImage? = {
-        let config = UIImage.SymbolConfiguration(hierarchicalColor: .secondaryWhite)
-        return UIImage(systemName: "music.note", withConfiguration: config)
-    }()
+    let artworkImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,30 +37,26 @@ final class BestMusicCell: UICollectionViewCell {
         
         titleLabel.font = .boldSystemFont(ofSize: 14)
         
-        artistLabel.font = .systemFont(ofSize: 12, weight: .medium)
-        artistLabel.textColor = .secondaryLabel
+        secondaryLabel.font = .systemFont(ofSize: 12, weight: .medium)
+        secondaryLabel.textColor = .secondaryLabel
         
-        albumImageView.contentMode = .center
-        albumImageView.backgroundColor = .systemGray4
-        albumImageView.layer.cornerRadius = 10
-        albumImageView.clipsToBounds = true
-        albumImageView.snp.makeConstraints {
+        artworkImageView.contentMode = .center
+        artworkImageView.layer.cornerRadius = 10
+        artworkImageView.clipsToBounds = true
+        artworkImageView.snp.makeConstraints {
             $0.width.height.equalTo(35)
         }
         
-        albumImageView.kf.indicatorType = .activity // 이미지를 가져오는 동안 애니메이션 표출 옵션
+        artworkImageView.kf.indicatorType = .activity // 이미지를 가져오는 동안 애니메이션 표출 옵션
     }
     
     private func setLayout() {
-        let noteImageView = UIImageView(image: noteImage)
-        noteImageView.contentMode = .scaleAspectFit
-        
         let songBackgroundView = UIView()
         songBackgroundView.backgroundColor = .secondaryWhite
         
-        let songlabelStack = UIStackView(vertical: [titleLabel, artistLabel])
+        let songlabelStack = UIStackView(vertical: [titleLabel, secondaryLabel])
         
-        let songStack = UIStackView(horizontal: [albumImageView, songlabelStack])
+        let songStack = UIStackView(horizontal: [artworkImageView, songlabelStack])
         
         contentView.addSubview(noteView)
         contentView.addSubview(songBackgroundView)
@@ -96,15 +87,15 @@ final class BestMusicCell: UICollectionViewCell {
     }
 }
 
-extension BestMusicCell {
+extension ResultCardCell {
     func configure(with music: Music) {
         titleLabel.text = music.title
-        artistLabel.text = music.artist
-        albumImageView.setImage(with: music.artworkUrl60 ?? "")
+        secondaryLabel.text = music.artist
+        artworkImageView.setImage(with: music.artworkUrl60 ?? "")
     }
 }
 
-extension BestMusicCell {    
+extension ResultCardCell {
     // 랜덤 컬러(밝은 색) 생성
     private func randomBrightColor() -> UIColor {
         let hue = CGFloat.random(in: 0...1)
@@ -119,3 +110,4 @@ extension BestMusicCell {
         )
     }
 }
+
