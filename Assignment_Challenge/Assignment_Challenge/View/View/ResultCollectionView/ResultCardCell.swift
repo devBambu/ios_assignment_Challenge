@@ -32,12 +32,15 @@ final class ResultCardCell: UICollectionViewCell {
         contentView.clipsToBounds = true
         contentView.backgroundColor = UIColor.randomPastel
         
-        titleLabel.font = .boldSystemFont(ofSize: 16)
+        titleLabel.font = .boldSystemFont(ofSize: 18)
         
-        secondaryLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        secondaryLabel.font = .systemFont(ofSize: 14, weight: .semibold)
         secondaryLabel.textColor = .secondaryLabel
         
         artworkImageView.contentMode = .scaleAspectFill
+        artworkImageView.snp.makeConstraints {
+            $0.height.equalTo(artworkImageView.snp.width)
+        }
     }
     
     private func setLayout() {
@@ -48,12 +51,11 @@ final class ResultCardCell: UICollectionViewCell {
         
         artworkImageView.snp.makeConstraints {
             $0.horizontalEdges.bottom.equalToSuperview()
-            $0.height.equalToSuperview().multipliedBy(0.8)
         }
         
         labelStack.snp.makeConstraints {
-            $0.horizontalEdges.equalToSuperview().inset(10)
-            $0.bottom.equalTo(artworkImageView.snp.top).offset(5)
+            $0.horizontalEdges.equalToSuperview().inset(15)
+            $0.bottom.equalTo(artworkImageView.snp.top).offset(-10)
         }
     }
 }

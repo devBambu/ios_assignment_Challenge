@@ -41,24 +41,26 @@ extension ResultCollectionView {
         
         return UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, environment in
             
+            let itemWidth = environment.container.effectiveContentSize.width
+            
             let item = NSCollectionLayoutItem(
                 layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalWidth(1.2)
+                    widthDimension: .absolute(itemWidth),
+                    heightDimension: .absolute(itemWidth + 70)
                 )
             )
             
             let group = NSCollectionLayoutGroup.vertical(
                 layoutSize: NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1),
-                    heightDimension: .fractionalHeight(1)
+                    widthDimension: .absolute(itemWidth),
+                    heightDimension: .absolute(itemWidth + 70)
                 ),
                 subitems: [item]
             )
             
             let section = NSCollectionLayoutSection(group: group)
-            section.interGroupSpacing = 10
-            section.orthogonalScrollingBehavior = .continuous
+            section.interGroupSpacing = 20
+//            section.orthogonalScrollingBehavior = .continuous
             
             return section
         }, configuration: configuration)
