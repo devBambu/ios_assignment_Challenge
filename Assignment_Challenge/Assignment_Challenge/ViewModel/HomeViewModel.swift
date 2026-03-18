@@ -11,7 +11,7 @@ final class HomeViewModel: ViewModel {
     struct Input {
         let fetchData: Observable<Void>
         let searchText: Observable<String>
-//        let playMusic: Observable<MusicCollectionView.Item?>
+        let playMusic: Observable<MusicCollectionView.Item?>
     }
     
     struct Output {
@@ -23,7 +23,7 @@ final class HomeViewModel: ViewModel {
         let tvShow: Observable<[TvShow]>
         let podcast: Observable<[Podcast]>
         
-//        let previewMusic: Observable<Data>
+        let musicPreviewTarget: Observable<(isNew: Bool, music: Music)>
     }
     
     func transform(_ input: Input) -> Output {
@@ -63,16 +63,12 @@ final class HomeViewModel: ViewModel {
                 networkService.rx.searchPodcast(with: $0)
             }
 
-        //previewMusicUrl
-//        let previewMusic = input.playMusic
-//            .flatMap { [networkService] in
-//                switch $0 {
-//                case .spring(let music):
-//                    return networkService.rx.fetchPreview(of: music)
-//                default:
-//                    return .empty()
-//                }
-//            }
+        // previewMusic
+        let target = input.playMusic
+            .flatMap { item in
+                self.fetchPreviewTarget(item: item)
+            }
+            
         
         return Output(
             spring: spring,
@@ -81,13 +77,49 @@ final class HomeViewModel: ViewModel {
             winter: winter,
             tvShow: tvShow,
             podcast: podcast,
-//            previewMusic: previewMusic
+            musicPreviewTarget: target
             )
     }
     
+    enum TargetError: Error {
+        case invalidTarget
+    }
+    
     private let networkService: NetworkService
+    private var currentPreview: Music?
     
     init(networkService: NetworkService) {
         self.networkService = networkService
+    }
+}
+
+extension HomeViewModel {
+    private func fetchPreviewTarget(item: MusicCollectionView.Item?) -> Observable<(isNew: Bool, music: Music)> {
+        Observable.create { [weak self] observer in
+            guard let self else { return Disposables.create() }
+            switch item {
+            case .spring(let music):
+                if self.currentPreview == music { // 현재 재생중인 곡과 동일한 곡이 선택되었을 경우
+                    
+                    guard let preview = currentPreview else { return Disposables.create() }
+                    
+                    observer.on(.next((false, preview)))
+                    observer.on(.completed)
+                    
+                } else { // 다른 곡이 선택되었을 경우
+                    currentPreview = music // 현재 재생중인 곡 변경
+                    
+                    guard let preview = currentPreview else { return Disposables.create() }
+                    
+                    observer.on(.next((true, preview)))
+                    observer.on(.completed)
+                }
+
+            default:
+                observer.onError(TargetError.invalidTarget)
+            }
+            
+            return Disposables.create()
+        }
     }
 }

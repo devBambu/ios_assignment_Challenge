@@ -16,8 +16,6 @@ struct Music: Codable, Hashable {
     var artworkUrl60: String? = nil // 앨범 아트 사이즈 60
     var previewUrl: String? = nil // 미리듣기
     
-//    var isPlaying: Bool = false
-    
     func hash(into hasher: inout Hasher) {
         hasher.combine(trackId)
     }

@@ -42,7 +42,7 @@ final class ResultViewController: UIViewController {
         let input = HomeViewModel.Input(
             fetchData: .empty(),
             searchText: searchKeyword,
-//            playMusic: .empty()
+            playMusic: .empty()
         )
         
         let output = viewModel.transform(input)

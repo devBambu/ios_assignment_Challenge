@@ -16,7 +16,6 @@ final class MusicCardCell: UICollectionViewCell {
     let albumImageView = UIImageView()
     let titleLabel = UILabel()
     let artistLabel = UILabel()
-    let playButton = UIButton()
     
     // 음표 이미지
     let noteImage: UIImage? = {
@@ -52,8 +51,6 @@ final class MusicCardCell: UICollectionViewCell {
         albumImageView.snp.makeConstraints {
             $0.width.height.equalTo(35)
         }
-        
-        setButton()
     }
     
     private func setLayout() {
@@ -72,7 +69,6 @@ final class MusicCardCell: UICollectionViewCell {
         
         noteView.addSubview(noteImageView)
         songBackgroundView.addSubview(songStack)
-        songBackgroundView.addSubview(playButton)
         
         noteImageView.snp.makeConstraints {
             $0.width.height.equalToSuperview().multipliedBy(0.4)
@@ -86,13 +82,7 @@ final class MusicCardCell: UICollectionViewCell {
         }
         
         songStack.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(10)
-            $0.trailing.equalTo(playButton.snp.leading).offset(-10)
-            $0.centerY.equalToSuperview()
-        }
-        
-        playButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().inset(20)
+            $0.horizontalEdges.equalToSuperview().inset(10)
             $0.centerY.equalToSuperview()
         }
         
@@ -101,28 +91,6 @@ final class MusicCardCell: UICollectionViewCell {
             $0.height.equalToSuperview().multipliedBy(0.25)
         }
     }
-    
-    private func setButton() {
-        var config = UIButton.Configuration.plain()
-        config.baseBackgroundColor = .clear
-        config.baseForegroundColor = .label
-        
-        playButton.configuration = config
-        playButton.configurationUpdateHandler = { button in
-            button.configuration?.image =
-            button.isSelected ? UIImage(systemName: "pause.fill")
-            : UIImage(systemName: "play.fill")
-        }
-        
-        playButton.addAction(UIAction { _ in self.playButton.isSelected.toggle() }, for: .touchUpInside)
-        
-        playButton.snp.makeConstraints {
-            $0.width.height.equalTo(30)
-        }
-        
-        playButton.isSelected = false
-    }
-
 }
 
 extension MusicCardCell {

@@ -45,6 +45,7 @@ class HomeViewController: UIViewController {
     
     //MARK: bind
     private func bind() {
+        // ResultVC와의 바인딩을 위한 searchBar 텍스트
         if let searchBar = navigationItem.searchController?.searchBar {
             searchBar.rx.text.orEmpty
                 .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
@@ -52,14 +53,26 @@ class HomeViewController: UIViewController {
                 .disposed(by: disposeBag)
         }
         
+        // 카드 셀 선택 시 해당 셀의 indexPath
+        let cellSelected = homeView.collectionView.rx.itemSelected
+            .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+            .share()
+        
+        // 선택된 카드 셀의 Item - Input과 바인딩
+        let playMusic = cellSelected
+            .map { [weak self] indexPath in
+                self?.homeView.fetchItem(of: indexPath)
+            }
+        
         let input = HomeViewModel.Input(
             fetchData: .just(()),
             searchText: .empty(),
-//            playMusic: playMusic
+            playMusic: playMusic
         )
         
         let output = viewModel.transform(input)
         
+        // 음악 데이터
         let spring = output.spring
             .map { musics in
                 musics.map {
@@ -100,38 +113,16 @@ class HomeViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        // 미리듣기 관련
-        let playMusic = homeView.collectionView.rx.itemSelected
-            .map { [weak self] indexPath in
-                self?.homeView.fetchItem(of: indexPath)
-            }
-//        
-//        playMusic
-//            .bind(onNext: { [weak self] item in
-//                switch item {
-//                case .spring(let music):
-//                
-//                default:
-//                    break
-//                }
-//            })
-        
-        playMusic
+        // 미리듣기
+        output.musicPreviewTarget
             .subscribe(
-                onNext: { [weak self] item in
-                    switch item {
-                    case .spring(let music):
-                        self?.playPreview(of: music)
-                    default:
-                        break
-                    }
+                onNext: { [weak self] target in
+                    self?.playPreview(of: target.music, isNew: target.isNew)
                 },
                 onError: { [weak self] error in
-                    print(error)
+                    self?.showAlert(title: "Error", message: "대상 파일을 찾지 못했습니다.")
                 })
             .disposed(by: disposeBag)
-
-        
     }
 }
 
@@ -151,28 +142,22 @@ extension HomeViewController {
 }
 
 extension HomeViewController {
-    private func playPreview(of music: Music) {
-        guard let url = URL(string: music.previewUrl ?? "") else { return }
-        
-        let item = AVPlayerItem(url: url)
-        
-        if musicPlayer?.currentItem == item {
-            if musicPlayer?.timeControlStatus == .paused {
-                musicPlayer?.seek(to: .zero) // 음원의 처음 부분으로 돌아감
-                musicPlayer?.play()
-            } else if musicPlayer?.timeControlStatus == .playing {
-                musicPlayer?.pause()
-            }
-        } else {
+    private func playPreview(of music: Music, isNew: Bool) {
+        if isNew { // 새로운 곡이 선택되었을 경우
+            guard let url = URL(string: music.previewUrl ?? "") else { return }
+            let item = AVPlayerItem(url: url)
+            
             musicPlayer = AVPlayer(playerItem: item)
             musicPlayer?.play()
-            musicPlayer?.actionAtItemEnd = .pause
+        } else { // 기존 재생중인 곡이 선택되었을 경우
+            if musicPlayer?.timeControlStatus == .playing { // 재생 중일 경우
+                musicPlayer?.pause() // 정지
+            } else { // 정지 중일 경우
+                musicPlayer?.seek(to: .zero) // 음원 처음 부분으로 돌아감
+                musicPlayer?.play() // 재생
+            }
         }
         
-    }
-    
-    private func stopPreview(of music: Music) {
-        musicPlayer?.pause()
-        musicPlayer?.seek(to: .zero)
+        musicPlayer?.actionAtItemEnd = .pause // 음원 종료시 정지 상태로 변경
     }
 }
