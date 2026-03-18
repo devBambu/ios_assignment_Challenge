@@ -29,7 +29,7 @@ final class NetworkService {
     }
     
     // 음악 정보
-    fileprivate func fetchMusic(of section: Section) async throws -> [Music] {
+    fileprivate func fetchMusic(of section: MusicCollectionView.Section) async throws -> [Music] {
         let query: (term: String, limit: Int) = switch section {
         case .spring:
             (term: "봄", limit: 5)
@@ -92,7 +92,7 @@ final class NetworkService {
 extension NetworkService: ReactiveCompatible { }
 
 extension Reactive where Base: NetworkService {
-    func fetchMusic(of section: Section) -> Single<[Music]> {
+    func fetchMusic(of section: MusicCollectionView.Section) -> Single<[Music]> {
         Single.create { [base] observer in
             let task = Task {
                 do {
