@@ -6,9 +6,9 @@
 //
 
 nonisolated
-struct TvShow: Codable, Hashable {
+struct TvShow: Codable, Hashable, Model {
+    var modelType: ModelType = .tvShow
     var trackId: Int
-    var kind: String // 종류 (Podcast or tv-episode)
     
     var title: String // 에피소드 이름
     var artist: String // 출연진
@@ -26,7 +26,6 @@ struct TvShow: Codable, Hashable {
     
     enum CodingKeys: String, CodingKey {
         case trackId
-        case kind
         
         case title = "trackName"
         case artist = "artistName"

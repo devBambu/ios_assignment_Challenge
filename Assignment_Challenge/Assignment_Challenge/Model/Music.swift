@@ -6,7 +6,9 @@
 //
 
 nonisolated
-struct Music: Codable, Hashable {
+struct Music: Codable, Hashable, Model {
+    var modelType: ModelType = .music
+    
     var trackId: Int
     var title: String // 곡 제목
     var artist: String // 가수
