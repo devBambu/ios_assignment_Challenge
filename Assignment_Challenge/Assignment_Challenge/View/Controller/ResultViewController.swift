@@ -13,13 +13,17 @@ final class ResultViewController: UIViewController {
     
     private let viewModel: HomeViewModel
     private let disposeBag = DisposeBag()
+    private let resultView = ResultView()
     
     private let searchKeyword: Observable<String>
+    
+    override func loadView() {
+        view = resultView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         bind()
-        print("result view loaded")
     }
     
     //MARK: init

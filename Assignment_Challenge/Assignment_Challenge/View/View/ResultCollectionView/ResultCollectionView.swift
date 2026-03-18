@@ -8,6 +8,21 @@
 import UIKit
 
 final class ResultCollectionView: UICollectionView {
+    nonisolated
+    enum Item: Hashable {
+        case podcast(Podcast)
+        case tvShow(TvShow)
+        
+        func hash(into hasher: inout Hasher) {
+            switch self {
+            case .podcast(let podcast):
+                hasher.combine(podcast)
+            case .tvShow(let tvShow):
+                hasher.combine(tvShow)
+            }
+        }
+    }
+    
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: UICollectionViewLayout())
         collectionViewLayout = makeCompositionalLayout()

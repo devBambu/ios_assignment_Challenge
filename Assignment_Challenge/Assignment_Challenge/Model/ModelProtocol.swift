@@ -11,6 +11,6 @@ enum ModelType {
     case tvShow
 }
 
-protocol Model {
+protocol Model: Hashable, Equatable {
     var modelType: ModelType { get }
 }

@@ -59,23 +59,16 @@ final class ResultCardCell: UICollectionViewCell {
 }
 
 extension ResultCardCell {
-    func configure(with data: Model) {
-        switch data.modelType {
-        case .podcast:
-            let podcast = data as! Podcast
-            secondaryLabel.text = "PODCAST OF THE DAY"
-            titleLabel.text = podcast.title
-            artworkImageView.setImage(with: podcast.artworkUrl100 ?? "")
-            
-        case .tvShow:
-            let tvShow = data as! TvShow
-            secondaryLabel.text = "SPOTLIGHT"
-            titleLabel.text = tvShow.title
-            artworkImageView.setImage(with: tvShow.artworkUrl100 ?? "")
-            
-        case .music:
-            break
-        }
+    func configure(with podcast: Podcast) {
+        secondaryLabel.text = "PODCAST OF THE DAY"
+        titleLabel.text = podcast.title
+        artworkImageView.setImage(with: podcast.artworkUrl100 ?? "")
+    }
+    
+    func configure(with tvShow: TvShow) {
+        secondaryLabel.text = "SPOTLIGHT"
+        titleLabel.text = tvShow.title
+        artworkImageView.setImage(with: tvShow.artworkUrl100 ?? "")
     }
 }
 

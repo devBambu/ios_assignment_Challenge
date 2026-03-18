@@ -6,8 +6,7 @@
 //
 
 nonisolated
-struct TvShow: Codable, Hashable, Model {
-    var modelType: ModelType = .tvShow
+struct TvShow: Codable, Hashable {
     var trackId: Int
     
     var title: String // 에피소드 이름

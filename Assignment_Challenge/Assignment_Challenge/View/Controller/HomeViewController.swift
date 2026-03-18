@@ -60,28 +60,28 @@ class HomeViewController: UIViewController {
         let spring = output.spring
             .map { musics in
                 musics.map {
-                    Item.spring($0)
+                    MusicItem.spring($0)
                 }
             }
         
         let summer = output.summer
             .map { musics in
                 musics.map {
-                    Item.summer($0)
+                    MusicItem.summer($0)
                 }
             }
         
         let autumn = output.autumn
             .map { musics in
                 musics.map {
-                    Item.autumn($0)
+                    MusicItem.autumn($0)
                 }
             }
         
         let winter = output.winter
             .map { musics in
                 musics.map {
-                    Item.winter($0)
+                    MusicItem.winter($0)
                 }
             }
         

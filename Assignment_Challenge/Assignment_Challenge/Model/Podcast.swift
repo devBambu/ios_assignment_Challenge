@@ -6,8 +6,7 @@
 //
 
 nonisolated
-struct Podcast: Codable, Hashable, Model {
-    var modelType: ModelType = .podcast
+struct Podcast: Codable, Hashable {
     var trackId: Int
     
     var title: String // 팟캐스트 이름

@@ -34,7 +34,7 @@ enum Section: Int {
 }
 
 nonisolated
-enum Item: Hashable {
+enum MusicItem: Hashable {
     case spring(Music)
     case summer(Music)
     case autumn(Music)
