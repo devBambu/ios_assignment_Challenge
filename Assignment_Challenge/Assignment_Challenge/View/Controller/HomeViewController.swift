@@ -93,7 +93,7 @@ class HomeViewController: UIViewController {
                 homeView.setSnapshot(with: [$0, $1, $2, $3])
             },
                 onError: { [weak self] error in
-                    self?.showAlert(title: "Network Error", message: "데이터를 가져올 수 없습니다.\nError: \(error)")
+                    self?.showAlert(title: "Network Error", message: "데이터를 가져올 수 없습니다.\nError: \(error.localizedDescription)")
             })
             .disposed(by: disposeBag)
     }

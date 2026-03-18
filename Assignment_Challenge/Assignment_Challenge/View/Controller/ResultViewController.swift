@@ -64,16 +64,25 @@ final class ResultViewController: UIViewController {
         
         // 컬렉션뷰 바인딩
         Observable
-            .merge(podcast, tvShow)
+            .combineLatest(podcast, tvShow)
             .subscribe(
-                onNext: { [resultView] in
-                    resultView.setSnapshot(with: $0)
+                onNext: { [resultView] podcast, tvShow in
+                    let result = (podcast + tvShow).shuffled() // 랜덤 배열 생성
+                    resultView.setSnapshot(with: result)
                 },
                 onError: { [weak self] error in
-                    print(error)
+                    self?.showAlert(title: "Network Error", message: "데이터를 가져올 수 없습니다.\n\(error.localizedDescription)")
                 })
             .disposed(by: disposeBag)
     }
 
 }
 
+extension ResultViewController {
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .cancel))
+        
+        present(alert, animated: true)
+    }
+}
