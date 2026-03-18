@@ -8,6 +8,10 @@ import Alamofire
 import Foundation
 import RxSwift
 
+enum NetworkError: Error {
+    case invalidURL
+}
+
 final class NetworkService {
     private let baseURL = "https://itunes.apple.com/search?"
     

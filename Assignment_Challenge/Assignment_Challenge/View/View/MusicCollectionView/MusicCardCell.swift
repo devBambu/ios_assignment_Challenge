@@ -38,7 +38,7 @@ final class MusicCardCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 10
         contentView.clipsToBounds = true
         
-        noteView.backgroundColor = randomBrightColor()
+        noteView.backgroundColor = UIColor.randomBright
         
         titleLabel.font = .boldSystemFont(ofSize: 14)
         
@@ -51,8 +51,6 @@ final class MusicCardCell: UICollectionViewCell {
         albumImageView.snp.makeConstraints {
             $0.width.height.equalTo(35)
         }
-        
-        albumImageView.kf.indicatorType = .activity // 이미지를 가져오는 동안 애니메이션 표출 옵션
     }
     
     private func setLayout() {
@@ -100,21 +98,5 @@ extension MusicCardCell {
         titleLabel.text = music.title
         artistLabel.text = music.artist
         albumImageView.setImage(with: music.artworkUrl60 ?? "")
-    }
-}
-
-extension MusicCardCell {    
-    // 랜덤 컬러(밝은 색) 생성
-    private func randomBrightColor() -> UIColor {
-        let hue = CGFloat.random(in: 0...1)
-        let saturation = CGFloat.random(in: 0.4...0.8)
-        let brightness = CGFloat.random(in: 0.8...1.0)
-        
-        return UIColor(
-            hue: hue,
-            saturation: saturation,
-            brightness: brightness,
-            alpha: 1
-        )
     }
 }
