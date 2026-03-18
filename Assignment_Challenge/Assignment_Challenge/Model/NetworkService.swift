@@ -10,6 +10,8 @@ import RxSwift
 
 enum NetworkError: Error {
     case invalidURL
+    case failedToFetchData
+    case emptyData
 }
 
 final class NetworkService {

@@ -5,11 +5,13 @@
 //  Created by t2025-m0143 on 3/12/26.
 //
 import RxSwift
+import Foundation
 
 final class HomeViewModel: ViewModel {
     struct Input {
         let fetchData: Observable<Void>
         let searchText: Observable<String>
+//        let playMusic: Observable<MusicCollectionView.Item?>
     }
     
     struct Output {
@@ -20,6 +22,8 @@ final class HomeViewModel: ViewModel {
         
         let tvShow: Observable<[TvShow]>
         let podcast: Observable<[Podcast]>
+        
+//        let previewMusic: Observable<Data>
     }
     
     func transform(_ input: Input) -> Output {
@@ -59,13 +63,25 @@ final class HomeViewModel: ViewModel {
                 networkService.rx.searchPodcast(with: $0)
             }
 
+        //previewMusicUrl
+//        let previewMusic = input.playMusic
+//            .flatMap { [networkService] in
+//                switch $0 {
+//                case .spring(let music):
+//                    return networkService.rx.fetchPreview(of: music)
+//                default:
+//                    return .empty()
+//                }
+//            }
+        
         return Output(
             spring: spring,
             summer: summer,
             autumn: autumn,
             winter: winter,
             tvShow: tvShow,
-            podcast: podcast
+            podcast: podcast,
+//            previewMusic: previewMusic
             )
     }
     

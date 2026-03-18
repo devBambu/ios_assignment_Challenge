@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import AVFoundation
 
 class HomeViewController: UIViewController {
 
@@ -19,6 +20,7 @@ class HomeViewController: UIViewController {
     private let homeView = HomeView()
     
     let searchKeywordRelay = BehaviorRelay<String>(value: "")
+    private var musicPlayer: AVPlayer?
     
     override func loadView() {
         view = homeView
@@ -52,7 +54,8 @@ class HomeViewController: UIViewController {
         
         let input = HomeViewModel.Input(
             fetchData: .just(()),
-            searchText: .empty()
+            searchText: .empty(),
+//            playMusic: playMusic
         )
         
         let output = viewModel.transform(input)
@@ -96,6 +99,39 @@ class HomeViewController: UIViewController {
                     self?.showAlert(title: "Network Error", message: "데이터를 가져올 수 없습니다.\nError: \(error)")
             })
             .disposed(by: disposeBag)
+        
+        // 미리듣기 관련
+        let playMusic = homeView.collectionView.rx.itemSelected
+            .map { [weak self] indexPath in
+                self?.homeView.fetchItem(of: indexPath)
+            }
+//        
+//        playMusic
+//            .bind(onNext: { [weak self] item in
+//                switch item {
+//                case .spring(let music):
+//                
+//                default:
+//                    break
+//                }
+//            })
+        
+        playMusic
+            .subscribe(
+                onNext: { [weak self] item in
+                    switch item {
+                    case .spring(let music):
+                        self?.playPreview(of: music)
+                    default:
+                        break
+                    }
+                },
+                onError: { [weak self] error in
+                    print(error)
+                })
+            .disposed(by: disposeBag)
+
+        
     }
 }
 
@@ -111,5 +147,32 @@ extension HomeViewController {
         alert.addAction(UIAlertAction(title: "확인", style: .cancel))
         
         present(alert, animated: true)
+    }
+}
+
+extension HomeViewController {
+    private func playPreview(of music: Music) {
+        guard let url = URL(string: music.previewUrl ?? "") else { return }
+        
+        let item = AVPlayerItem(url: url)
+        
+        if musicPlayer?.currentItem == item {
+            if musicPlayer?.timeControlStatus == .paused {
+                musicPlayer?.seek(to: .zero) // 음원의 처음 부분으로 돌아감
+                musicPlayer?.play()
+            } else if musicPlayer?.timeControlStatus == .playing {
+                musicPlayer?.pause()
+            }
+        } else {
+            musicPlayer = AVPlayer(playerItem: item)
+            musicPlayer?.play()
+            musicPlayer?.actionAtItemEnd = .pause
+        }
+        
+    }
+    
+    private func stopPreview(of music: Music) {
+        musicPlayer?.pause()
+        musicPlayer?.seek(to: .zero)
     }
 }
