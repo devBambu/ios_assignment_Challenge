@@ -62,13 +62,15 @@ extension ResultCardCell {
     func configure(with podcast: Podcast) {
         secondaryLabel.text = "PODCAST OF THE DAY"
         titleLabel.text = podcast.title
-        artworkImageView.setImage(with: podcast.artworkUrl100 ?? "")
+        artworkImageView.setImage(
+            with: podcast.artworkUrl600 ?? podcast.artworkUrl100 ?? "")
     }
     
     func configure(with tvShow: TvShow) {
         secondaryLabel.text = "SPOTLIGHT"
         titleLabel.text = tvShow.title
-        artworkImageView.setImage(with: tvShow.artworkUrl100 ?? "")
+        artworkImageView.setImage(
+            with: tvShow.artworkUrl600 ?? tvShow.artworkUrl100 ?? "")
     }
 }
 

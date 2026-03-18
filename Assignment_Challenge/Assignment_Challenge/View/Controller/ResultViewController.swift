@@ -46,20 +46,32 @@ final class ResultViewController: UIViewController {
         
         let output = viewModel.transform(input)
         
-        output.tvShow
-            .subscribe(onNext: {
-                print($0)
-            }, onError: {
-                print($0)
-            })
-            .disposed(by: disposeBag)
+        let podcast = output.podcast
+            .map { podcasts in
+                podcasts.map {
+                    ResultCollectionView.Item.podcast($0)
+                }
+            }
+            .share()
         
-        output.podcast
-            .subscribe(onNext: {
-                print($0)
-            }, onError: {
-                print($0)
-            })
+        let tvShow = output.tvShow
+            .map { tvShows in
+                tvShows.map {
+                    ResultCollectionView.Item.tvShow($0)
+                }
+            }
+            .share()
+        
+        // 컬렉션뷰 바인딩
+        Observable
+            .merge(podcast, tvShow)
+            .subscribe(
+                onNext: { [resultView] in
+                    resultView.setSnapshot(with: $0)
+                },
+                onError: { [weak self] error in
+                    print(error)
+                })
             .disposed(by: disposeBag)
     }
 

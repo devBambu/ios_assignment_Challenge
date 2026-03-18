@@ -13,8 +13,9 @@ struct TvShow: Codable, Hashable {
     var artist: String // 출연진
     var collection: String? // Tv 시리즈 이름
     
-    var artworkUrl100: String? = nil // 아트 사이즈 100
     var previewUrl: String? = nil // 프리뷰
+    var artworkUrl100: String? = nil // 아트 사이즈 100
+    var artworkUrl600: String? = nil // 아트 사이즈 600
     
     var shortDescription: String?
     var longDescription: String?
@@ -30,8 +31,9 @@ struct TvShow: Codable, Hashable {
         case artist = "artistName"
         case collection = "collectionName"
         
-        case artworkUrl100
         case previewUrl
+        case artworkUrl100
+        case artworkUrl600
         
         case shortDescription
         case longDescription
