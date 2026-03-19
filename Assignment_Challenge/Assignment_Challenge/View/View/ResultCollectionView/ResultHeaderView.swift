@@ -22,7 +22,7 @@ final class ResultHeaderView: UICollectionReusableView {
         
         titleLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
         }
     }
     

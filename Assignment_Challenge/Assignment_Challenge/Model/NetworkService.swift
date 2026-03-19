@@ -107,7 +107,7 @@ extension Reactive where Base: NetworkService {
             
             return Disposables.create {
                 task.cancel() // 구독이 dispose될 때 진행중인 task를 cancel
-
+                AF.cancelAllRequests() // Alamofire DataRequest cancel
             }
         }
     }
@@ -126,6 +126,7 @@ extension Reactive where Base: NetworkService {
             
             return Disposables.create {
                 task.cancel() // 구독이 dispose될 때 진행중인 task를 cancel
+                AF.cancelAllRequests() // Alamofire DataRequest cancel
             }
         }
     }
@@ -144,6 +145,7 @@ extension Reactive where Base: NetworkService {
             
             return Disposables.create {
                 task.cancel() // 구독이 dispose될 때 진행중인 task를 cancel
+                AF.cancelAllRequests() // Alamofire DataRequest cancel
             }
         }
     }
