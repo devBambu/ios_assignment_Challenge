@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 
-enum NetworkError: Error {
+enum NetworkError: Error, AlertableError {
     case invalidURL
     case failedToFetchData
     case emptyData
