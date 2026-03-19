@@ -109,7 +109,7 @@ class HomeViewController: UIViewController {
                 homeView.setSnapshot(with: [$0, $1, $2, $3])
             },
                 onError: { [weak self] error in
-                    self?.showAlert(title: "Network Error", message: "데이터를 가져올 수 없습니다.\nError: \(error.localizedDescription)")
+                    self?.showAlert(error: error)
             })
             .disposed(by: disposeBag)
         
@@ -121,7 +121,7 @@ class HomeViewController: UIViewController {
                     case .success((let isNew, let music)):
                         self?.playPreview(of: music, isNew: isNew)
                     case .failure(let error):
-                        self?.showAlert(title: "Error", message: "대상 파일을 찾지 못했습니다.")
+                        self?.showAlert(error: error)
                     }
                 })
             .disposed(by: disposeBag)
@@ -135,8 +135,8 @@ extension HomeViewController {
         navigationItem.preferredSearchBarPlacement = .stacked
     }
     
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    private func showAlert(error: any Error) {
+        let alert = UIAlertController(title: error.title(), message: error.message(), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .cancel))
         
         present(alert, animated: true)

@@ -76,7 +76,7 @@ final class ResultViewController: UIViewController {
                     resultView.setSnapshot(with: result)
                 },
                 onError: { [weak self] error in
-                    self?.showAlert(title: "Network Error", message: "데이터를 가져올 수 없습니다.\n\(error.localizedDescription)")
+                    self?.showAlert(error: error)
                 })
             .disposed(by: disposeBag)
     }
@@ -84,8 +84,8 @@ final class ResultViewController: UIViewController {
 }
 
 extension ResultViewController {
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    private func showAlert(error: any Error) {
+        let alert = UIAlertController(title: error.title(), message: error.message(), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .cancel))
         
         present(alert, animated: true)

@@ -72,7 +72,7 @@ final class HomeViewModel: ViewModel {
                         .success($0)
                     }
                     .catch {
-                        .just(.failure($0))
+                        .just(.failure($0 as! HomeViewModel.TargetError))
                     }
             }
         
