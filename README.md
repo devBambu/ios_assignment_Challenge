@@ -39,8 +39,6 @@ App Store 앱을 참고하여 제시된 최소 요구사항을 충족함과 동�
 
 # 📂 프로젝트 폴더 구조
 
-프로젝트는 **MVVM 구조에 맞게 역할별로 디렉토리를 분리**하여 관리했습니다.
-
 ```
 Assignment_Challenge
 └── Assignment_Challenge
@@ -86,7 +84,7 @@ Assignment_Challenge
         └── ViewModelProtocol.swift
 ```
 
-### 구조 설계 이유 
+### 구조별 역할
 - **Model** : 앱에서 사용하는 데이터 모델 및 네트워크(모델, 네트워크 서비스)
 - **Extension** : 공통 유틸리티 사용을 위한 확장 선언 파일 
 - **View**
