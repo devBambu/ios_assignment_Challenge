@@ -144,7 +144,7 @@ extension HomeViewController {
 extension HomeViewController {
     private func playPreview(of music: Music, isNew: Bool) {
         if isNew { // 새로운 곡이 선택되었을 경우
-            guard let url = URL(string: music.previewUrl ?? "") else { return }
+            guard let previewUrl = music.previewUrl, let url = URL(string: previewUrl) else { self.showAlert(title: "재생 오류", message: "미리듣기를 제공하지 않는 곡입니다."); return }
             let item = AVPlayerItem(url: url)
             
             musicPlayer = AVPlayer(playerItem: item)
