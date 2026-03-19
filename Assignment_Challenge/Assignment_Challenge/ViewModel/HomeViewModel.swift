@@ -23,7 +23,7 @@ final class HomeViewModel: ViewModel {
         let tvShow: Observable<[TvShow]>
         let podcast: Observable<[Podcast]>
         
-        let musicPreviewTarget: Observable<(isNew: Bool, music: Music)>
+        let musicPreviewTarget: Observable<Result<(isNew: Bool, music: Music), Error>>
     }
     
     func transform(_ input: Input) -> Output {
@@ -64,11 +64,17 @@ final class HomeViewModel: ViewModel {
             }
 
         // previewMusic
-        let target = input.playMusic
-            .flatMap { item in
+        let target: Observable<Result<(isNew: Bool, music: Music), Error>> = input.playMusic
+            .withUnretained(self) // self를 가져오는데 강한 참조는 x, self가 없으면 flatMap 연산 x
+            .flatMap { `self`, item in
                 self.fetchPreviewTarget(item: item)
+                    .map {
+                        .success($0)
+                    }
+                    .catch {
+                        .just(.failure($0))
+                    }
             }
-            
         
         return Output(
             spring: spring,

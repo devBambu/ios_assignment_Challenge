@@ -56,7 +56,7 @@ class HomeViewController: UIViewController {
         // 카드 셀 선택 시 해당 셀의 indexPath
         let cellSelected = homeView.collectionView.rx.itemSelected
             .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
-            .share()
+//            .share() hot observable이라 없어도됨
         
         // 선택된 카드 셀의 Item - Input과 바인딩
         let playMusic = cellSelected
@@ -117,10 +117,12 @@ class HomeViewController: UIViewController {
         output.musicPreviewTarget
             .subscribe(
                 onNext: { [weak self] target in
-                    self?.playPreview(of: target.music, isNew: target.isNew)
-                },
-                onError: { [weak self] error in
-                    self?.showAlert(title: "Error", message: "대상 파일을 찾지 못했습니다.")
+                    switch target {
+                    case .success((let isNew, let music)):
+                        self?.playPreview(of: music, isNew: isNew)
+                    case .failure(let error):
+                        self?.showAlert(title: "Error", message: "대상 파일을 찾지 못했습니다.")
+                    }
                 })
             .disposed(by: disposeBag)
     }
