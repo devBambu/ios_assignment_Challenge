@@ -88,7 +88,9 @@ Assignment_Challenge
 - **Model** : 앱에서 사용하는 데이터 모델 및 네트워크(모델, 네트워크 서비스)
 - **Extension** : 공통 유틸리티 사용을 위한 확장 선언 파일 
 - **View**
+  <br>
     : View - UI 구성 요소 관리
+  <br>
     : ViewController - ViewModel과의 바인딩
 - **ViewModel** : 비즈니스 로직 처리  
 
