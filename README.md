@@ -21,15 +21,15 @@ App Store 앱을 참고하여 제시된 최소 요구사항을 충족함과 동�
 
 # 🏗 아키텍처
 
-**MVVM**
+### MVVM
 
-### MVVM을 적용한 이유
+**MVVM을 적용한 이유**
 - View와 비즈니스 로직 분리
 - RxSwift 학습을 위함 (데이터 바인딩 등)
 
-**Coordinator Pattern**
+### Coordinator Pattern
 
-### Coordinator 패턴을 적용한 이유
+**Coordinator 패턴을 적용한 이유**
 - View의 네비게이션 로직 분리
 - 화면 전환 시 데이터 전달의 책임 담당
 : VC 간의 직접적인 접근이 필요 없음
