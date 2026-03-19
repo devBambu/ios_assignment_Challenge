@@ -87,8 +87,19 @@ final class HomeViewModel: ViewModel {
             )
     }
     
-    enum TargetError: Error {
+    enum TargetError: Error, AlertableError {
         case invalidTarget
+        
+        func title() -> String {
+            "Target Error"
+        }
+        
+        func message() -> String {
+            switch self {
+            case .invalidTarget:
+                "대상이 유효하지 않습니다."
+            }
+        }
     }
     
     private let networkService: NetworkService

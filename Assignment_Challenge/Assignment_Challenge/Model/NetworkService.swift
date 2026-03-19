@@ -8,10 +8,23 @@ import Alamofire
 import Foundation
 import RxSwift
 
-enum NetworkError: Error {
+
+enum NetworkError: Error, AlertableError {
     case invalidURL
     case failedToFetchData
     case emptyData
+    
+    func title() -> String {
+        return "Network Error"
+    }
+    
+    func message() -> String {
+        switch self {
+        case .invalidURL: "유효하지 않은 URL입니다."
+        case .failedToFetchData: "데이터를 가져오는 데 실패하였습니다."
+        case .emptyData: "빈 데이터입니다."
+        }
+    }
 }
 
 final class NetworkService {

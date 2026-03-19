@@ -109,7 +109,7 @@ class HomeViewController: UIViewController {
                 homeView.setSnapshot(with: [$0, $1, $2, $3])
             },
                 onError: { [weak self] error in
-                    self?.showAlert(title: "Network Error", message: "데이터를 가져올 수 없습니다.\nError: \(error.localizedDescription)")
+                    self?.showAlert(error: error as! AlertableError)
             })
             .disposed(by: disposeBag)
         
@@ -121,7 +121,7 @@ class HomeViewController: UIViewController {
                     case .success((let isNew, let music)):
                         self?.playPreview(of: music, isNew: isNew)
                     case .failure(let error):
-                        self?.showAlert(title: "Error", message: "대상 파일을 찾지 못했습니다.")
+                        self?.showAlert(error: error as! AlertableError)
                     }
                 })
             .disposed(by: disposeBag)
@@ -135,8 +135,8 @@ extension HomeViewController {
         navigationItem.preferredSearchBarPlacement = .stacked
     }
     
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    private func showAlert(error: AlertableError) {
+        let alert = UIAlertController(title: error.title(), message: error.message(), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .cancel))
         
         present(alert, animated: true)
@@ -146,7 +146,11 @@ extension HomeViewController {
 extension HomeViewController {
     private func playPreview(of music: Music, isNew: Bool) {
         if isNew { // 새로운 곡이 선택되었을 경우
-            guard let previewUrl = music.previewUrl, let url = URL(string: previewUrl) else { self.showAlert(title: "재생 오류", message: "미리듣기를 제공하지 않는 곡입니다."); return }
+            guard let previewUrl = music.previewUrl, let url = URL(string: previewUrl) else {
+                showAlert(error: NetworkError.invalidURL)
+                return
+            }
+            
             let item = AVPlayerItem(url: url)
             
             musicPlayer = AVPlayer(playerItem: item)
