@@ -8,6 +8,7 @@ import Alamofire
 import Foundation
 import RxSwift
 
+extension Alamofire.AFError: AlertableError { }
 
 enum NetworkError: Error, AlertableError {
     case invalidURL
@@ -28,10 +29,10 @@ enum NetworkError: Error, AlertableError {
 }
 
 final class NetworkService {
-    private let baseURL = "https://itunes.apple.com/search?"
+    private let baseURL = URL(string: "https://itunes.apple.com/search?")
     
-    private func searchData<T: Codable>(url: URL) async throws -> T {
-        let publisher = AF.request(url, method: .get)
+    private func searchData<T: Codable>(url: URL, parameters: [String: Any]) async throws -> T {
+        let publisher = AF.request(url, method: .get, parameters: parameters)
             .validate()
             .serializingDecodable(T.self)
         
@@ -51,55 +52,49 @@ final class NetworkService {
         default:
             (term: section.title, limit: 12)
         }
-        
-        var urlComp = URLComponents(string: baseURL)
-        let queryItems = [
-            URLQueryItem(name: "term", value: query.term),
-            URLQueryItem(name: "country", value: "KR"),
-            URLQueryItem(name: "limit", value: "\(query.limit)"),
-            URLQueryItem(name: "media", value: "music")
+
+        let parameters: [String: Any] = [
+            "term": query.term,
+            "country": "KR",
+            "limit": "\(query.limit)",
+            "media": "music"
         ]
+
+        guard let url = baseURL else { throw NetworkError.invalidURL }
         
-        urlComp?.queryItems = queryItems
-        
-        guard let url = urlComp?.url else { throw NetworkError.invalidURL }
-        
-        let response: MusicResponse = try await searchData(url: url)
+        let response: MusicResponse = try await searchData(url: url, parameters: parameters)
         return response.results
     }
     
     // 팟캐스트 검색
     fileprivate func searchPodcast(with text: String) async throws -> [Podcast] {
-        var urlComp = URLComponents(string: baseURL)
-        let queryItems = [
-            URLQueryItem(name: "term", value: text),
-            URLQueryItem(name: "country", value: "KR"),
-            URLQueryItem(name: "limit", value: "5"),
-            URLQueryItem(name: "media", value: "podcast")
+        
+        guard let url = baseURL else { throw NetworkError.invalidURL }
+        
+        let parameters: [String: Any] = [
+            "term": text,
+            "country": "KR",
+            "limit": "5",
+            "media": "podcast"
         ]
         
-        urlComp?.queryItems = queryItems
-        
-        guard let url = urlComp?.url else { throw NetworkError.invalidURL }
-        
-        let response: PodcastResponse = try await searchData(url: url)
+        let response: PodcastResponse = try await searchData(url: url, parameters: parameters)
         return response.results
     }
     
     // tvShow 검색
     fileprivate func searchTvShow(with text: String) async throws -> [TvShow] {
-        var urlComp = URLComponents(string: baseURL)
-        let queryItems = [
-            URLQueryItem(name: "term", value: text),
-            URLQueryItem(name: "limit", value: "5"),
-            URLQueryItem(name: "media", value: "tvShow")
+    
+        guard let url = baseURL else { throw NetworkError.invalidURL }
+        
+        let parameters: [String: Any] = [
+            "term": text,
+            "country": "KR",
+            "limit": "5",
+            "media": "tvShow"
         ]
         
-        urlComp?.queryItems = queryItems
-        
-        guard let url = urlComp?.url else { throw NetworkError.invalidURL }
-        
-        let response: TvShowResponse = try await searchData(url: url)
+        let response: TvShowResponse = try await searchData(url: url, parameters: parameters)
         return response.results
     }
 }
@@ -120,7 +115,6 @@ extension Reactive where Base: NetworkService {
             
             return Disposables.create {
                 task.cancel() // 구독이 dispose될 때 진행중인 task를 cancel
-                AF.cancelAllRequests() // Alamofire DataRequest cancel
             }
         }
     }
@@ -139,7 +133,6 @@ extension Reactive where Base: NetworkService {
             
             return Disposables.create {
                 task.cancel() // 구독이 dispose될 때 진행중인 task를 cancel
-                AF.cancelAllRequests() // Alamofire DataRequest cancel
             }
         }
     }
@@ -158,7 +151,6 @@ extension Reactive where Base: NetworkService {
             
             return Disposables.create {
                 task.cancel() // 구독이 dispose될 때 진행중인 task를 cancel
-                AF.cancelAllRequests() // Alamofire DataRequest cancel
             }
         }
     }

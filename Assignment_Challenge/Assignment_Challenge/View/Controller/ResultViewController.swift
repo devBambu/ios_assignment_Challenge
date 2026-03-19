@@ -76,7 +76,7 @@ final class ResultViewController: UIViewController {
                     resultView.setSnapshot(with: result)
                 },
                 onError: { [weak self] error in
-                    self?.showAlert(error: error)
+                    self?.showAlert(error: error as! AlertableError)
                 })
             .disposed(by: disposeBag)
     }
@@ -84,7 +84,7 @@ final class ResultViewController: UIViewController {
 }
 
 extension ResultViewController {
-    private func showAlert(error: any Error) {
+    private func showAlert(error: AlertableError) {
         let alert = UIAlertController(title: error.title(), message: error.message(), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .cancel))
         
