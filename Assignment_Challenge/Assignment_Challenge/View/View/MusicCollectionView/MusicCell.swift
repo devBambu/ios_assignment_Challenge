@@ -73,6 +73,6 @@ extension MusicCell {
         titleLabel.text = music.title
         artistLabel.text = music.artist
         collectionLabel.text = music.collection
-        albumImageView.setImage(with: music.artworkUrl60 ?? "")
+        albumImageView.setImage(with: music.artworkUrl ?? "")
     }
 }

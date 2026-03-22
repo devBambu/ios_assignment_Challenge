@@ -103,6 +103,6 @@ extension MusicCardCell {
     func configure(with music: Music) {
         titleLabel.text = music.title
         artistLabel.text = music.artist
-        albumImageView.setImage(with: music.artworkUrl60 ?? "")
+        albumImageView.setImage(with: music.artworkUrl ?? "")
     }
 }
