@@ -5,6 +5,7 @@
 //  Created by t2025-m0143 on 3/12/26.
 //
 
+nonisolated
 struct Music: Hashable, MediaEntity {
     var trackId: Int
     var title: String // 곡 제목

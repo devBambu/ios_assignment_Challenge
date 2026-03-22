@@ -5,6 +5,7 @@
 //  Created by t2025-m0143 on 3/17/26.
 //
 
+nonisolated
 struct TvShow: Hashable, MediaEntity {
     var trackId: Int
     

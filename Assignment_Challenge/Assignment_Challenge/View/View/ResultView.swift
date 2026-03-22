@@ -9,7 +9,7 @@ import SnapKit
 import RxSwift
 
 final class ResultView: UIView {
-    private let collectionView = ResultCollectionView()
+    let collectionView = ResultCollectionView()
     private lazy var dataSource = makeCollectionViewDiffableDataSource(collectionView)
     fileprivate var searchKeyword: String = ""
     
@@ -32,6 +32,11 @@ extension ResultView {
         collectionView.snp.makeConstraints {
             $0.edges.equalTo(safeAreaLayoutGuide)
         }
+    }
+    
+    func fetchItem(of indexPath: IndexPath) -> ResultCollectionView.Item? {
+        let item = dataSource.itemIdentifier(for: indexPath)
+        return item
     }
 }
 

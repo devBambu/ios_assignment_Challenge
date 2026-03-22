@@ -11,6 +11,8 @@ import RxCocoa
 
 final class ResultViewController: UIViewController {
     
+    weak var coordinator: AppCoordinator?
+    
     private let viewModel: HomeViewModel
     private let disposeBag = DisposeBag()
     private let resultView = ResultView()
@@ -78,6 +80,16 @@ final class ResultViewController: UIViewController {
                 onError: { [weak self] error in
                     self?.showAlert(error: error as! AlertableError)
                 })
+            .disposed(by: disposeBag)
+        
+        resultView.collectionView.rx.itemSelected
+            .throttle(.milliseconds(500), scheduler: MainScheduler.instance)
+            .compactMap { [weak self] indexPath in
+                self?.resultView.fetchItem(of: indexPath)
+            }
+            .subscribe(onNext: { [weak self] item in
+                self?.coordinator?.showDetailView(of: item)
+            })
             .disposed(by: disposeBag)
     }
 

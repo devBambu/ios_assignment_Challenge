@@ -44,6 +44,8 @@ class AppCoordinator: Coordinator {
             viewModel: homeVC.viewModel,
             searchKeyword: homeVC.searchKeywordRelay.asObservable()
         )
+        resultVC.coordinator = self
+        
         let searchController = UISearchController(searchResultsController: resultVC)
         
         searchController.obscuresBackgroundDuringPresentation = false // 검색바 클릭시 반투명하게 보이기
@@ -51,5 +53,10 @@ class AppCoordinator: Coordinator {
         
         homeVC.navigationItem.searchController = searchController
         homeVC.navigationItem.hidesSearchBarWhenScrolling = false // 스크롤 시 검색바 고정
+    }
+    
+    func showDetailView(of item: ResultCollectionView.Item) {
+        let child = DetailCoordinator(parentCoordinator: self, children: [], navigationController: navigationController, item: item)
+        child.start()
     }
 }
